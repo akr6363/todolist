@@ -28,7 +28,7 @@ function App(): JSX.Element {
     }
 
     function addTask(title: string) {
-        let newTask = {id: v1(), title: title, isDone: false}
+        let newTask: TasksType = {id: v1(), title: title, isDone: false}
         setTasks([newTask, ...tasks])
     }
 

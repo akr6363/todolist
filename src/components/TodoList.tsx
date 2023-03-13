@@ -8,16 +8,20 @@ type TodoListPropsType = {
     removeTask: (taskId: string) => void
     setTasksFilter: (value: filterType) => void
     addTask: (title: string) => void
+    changeTaskStatus: (taskId: string, isDone: boolean) => void
+    filter: filterType
 }
 
 
 const TodoList: React.FC<TodoListPropsType> = (props) => {
 
     let [inputValue, setInputValue] = useState('')
+    let [error, setError] = useState<string | null>(null)
+
 
     let isAllTasksNotDone = true
     for (let i = 0; i < props.tasks.length; i++) {
-        if (props.tasks[i].isDone === true) {
+        if (props.tasks[i].isDone) {
             isAllTasksNotDone = false;
             break;
         }
@@ -28,10 +32,16 @@ const TodoList: React.FC<TodoListPropsType> = (props) => {
     const todoListItems: Array<JSX.Element> = props.tasks.map((task) => {
 
         const onRemoveTaskClickHandler = () => props.removeTask(task.id)
+        const onChangeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
+            props.changeTaskStatus(task.id, e.currentTarget.checked)
+        }
 
         return (
-            <li key={task.id}>
-                <input type="checkbox" checked={task.isDone}/>
+            <li className={task.isDone ? 'is-done' : ''}
+                key={task.id}>
+                <input type="checkbox"
+                       checked={task.isDone}
+                       onChange={onChangeTaskStatusHandler}/>
                 <span>{task.title}</span>
                 <button onClick={onRemoveTaskClickHandler}>x
                 </button>
@@ -41,34 +51,31 @@ const TodoList: React.FC<TodoListPropsType> = (props) => {
     })
 
     const maxTitleLength = 20
-    const recommendedTitleLength = 10
 
     const onChangeInputValueHandler = (event: ChangeEvent<HTMLInputElement>) => {
         setInputValue(event.currentTarget.value)
+        setError(null)
+        if (event.currentTarget.value.length > maxTitleLength) {
+            setError('Title is too long!!!')
+        }
+        if (event.currentTarget.value.trim().length === 0) {
+            setError('Title can not be empty')
+        }
     }
 
-    // const onKeyUpAddTaskHandler = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    //     if (event.ctrlKey && event.key === 'Enter') {
-    //         onAddTaskClickHandler()
-    //     }
-    // }
 
-    //разобраться--------------------------------------------------------------------------
+    const onKeyUpAddTaskHandler = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        if (event.ctrlKey && event.key === 'Enter') {
+            onAddTaskClickHandler()
+        }
+    }
 
-    const isAddTaskNotPossible = inputValue.trim().length === 0 || inputValue.length > maxTitleLength
-
-    const onKeyUpAddTaskHandler = isAddTaskNotPossible
-        ? undefined
-        : (event: React.KeyboardEvent<HTMLInputElement>) => (event.ctrlKey && event.key === 'Enter') && onAddTaskClickHandler()
-
-    //--------------------------------------------------------------
-
-    const isTitleMaybeShorter = (inputValue.length > recommendedTitleLength && inputValue.length <= maxTitleLength)
-    const isTitleTooLong = inputValue.length > maxTitleLength
 
     const onAddTaskClickHandler = () => {
-        props.addTask(inputValue)
-        setInputValue('')
+        if (!error) {
+            props.addTask(inputValue.trim())
+            setInputValue('')
+        }
     }
 
     const onSetFilterHandler = (value: filterType) => {
@@ -79,33 +86,36 @@ const TodoList: React.FC<TodoListPropsType> = (props) => {
         <div className={todoClasses}>
             <h3>{props.title}</h3>
             <div>
-                <input placeholder={'Enter task title, please'}
+                <input className={`input ${error && 'error-input'}`}
+                       placeholder={'Enter task title, please'}
                        value={inputValue}
                        onChange={onChangeInputValueHandler}
                        onKeyUp={onKeyUpAddTaskHandler}/>
 
-                <button disabled={isAddTaskNotPossible}
+                <button disabled={inputValue.length === 0}
                         onClick={onAddTaskClickHandler}>
                     +
                 </button>
-                {isTitleMaybeShorter && <div style={{color: 'red'}}>Title should be shorter</div>}
-                {isTitleTooLong && <div style={{color: 'red'}}>Title is too long!!!</div>}
+                {error && <div className={'error'}>{error}</div>}
             </div>
             <ul>
                 {todoListItems}
             </ul>
             <div>
-                <button onClick={() => {
-                    onSetFilterHandler('all')
-                }}>All
+                <button className={props.filter === 'all' ? 'active-filter' : ''}
+                        onClick={() => {
+                            onSetFilterHandler('all')
+                        }}>All
                 </button>
-                <button onClick={() => {
-                    onSetFilterHandler('active')
-                }}>Active
+                <button className={props.filter === 'active' ? 'active-filter' : ''}
+                        onClick={() => {
+                            onSetFilterHandler('active')
+                        }}>Active
                 </button>
-                <button onClick={() => {
-                    onSetFilterHandler('completed')
-                }}>Completed
+                <button className={props.filter === 'completed' ? 'active-filter' : ''}
+                        onClick={() => {
+                            onSetFilterHandler('completed')
+                        }}>Completed
                 </button>
             </div>
         </div>

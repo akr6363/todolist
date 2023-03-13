@@ -36,6 +36,14 @@ function App(): JSX.Element {
         setFilter(value)
     }
 
+    function changeTaskStatus(taskId: string, isDone: boolean) {
+        let task = tasks.find(task => task.id === taskId)
+        if (task) {
+            task.isDone = isDone
+        }
+        setTasks([...tasks])
+    }
+
     let tasksForRender = tasks
     if (filter === 'active') {
         tasksForRender = tasksForRender.filter((task) => !task.isDone)
@@ -50,7 +58,9 @@ function App(): JSX.Element {
                       tasks={tasksForRender}
                       removeTask={removeTask}
                       setTasksFilter={setTasksFilter}
-                      addTask={addTask}/>
+                      addTask={addTask}
+                      changeTaskStatus={changeTaskStatus}
+                      filter={filter}/>
         </div>
     );
 }

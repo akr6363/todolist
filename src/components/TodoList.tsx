@@ -1,27 +1,31 @@
 import React, {ChangeEvent, useState} from 'react';
-import {filterType, TasksType} from "../App";
+import {filterType, TasksType, TaskType} from "../App";
 
 
 type TodoListPropsType = {
+    id: string
     title: string,
-    tasks: Array<TasksType>,
-    removeTask: (taskId: string) => void
-    setTasksFilter: (value: filterType) => void
-    addTask: (title: string) => void
-    changeTaskStatus: (taskId: string, isDone: boolean) => void
+    tasks: Array<TaskType>,
+    removeTask: (taskId: string, todoListId: string) => void
+    setTasksFilter: (value: filterType, todoListsId: string) => void
+    addTask: (title: string, todoListsId: string) => void
+    changeTaskStatus: (taskId: string, isDone: boolean, todoListsId: string) => void
+    removeTasksList: (todoListsId: string) => void
     filter: filterType
 }
 
 
 const TodoList: React.FC<TodoListPropsType> = (
     {
+        id,
         title,
         tasks,
         removeTask,
         changeTaskStatus,
         setTasksFilter,
         filter,
-        addTask
+        addTask,
+        removeTasksList
     }) => {
 
     let [inputValue, setInputValue] = useState('')
@@ -40,9 +44,9 @@ const TodoList: React.FC<TodoListPropsType> = (
 
     const todoListItems: Array<JSX.Element> = tasks.map((task) => {
 
-        const onRemoveTaskClickHandler = () => removeTask(task.id)
+        const onRemoveTaskClickHandler = () => removeTask(task.id, id)
         const onChangeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
-            changeTaskStatus(task.id, e.currentTarget.checked)
+            changeTaskStatus(task.id, e.currentTarget.checked, id)
         }
 
         return (
@@ -74,28 +78,30 @@ const TodoList: React.FC<TodoListPropsType> = (
         }
     }
 
-
     const onKeyUpAddTaskHandler = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.ctrlKey && event.key === 'Enter') {
             onAddTaskClickHandler()
         }
     }
 
-
     const onAddTaskClickHandler = () => {
         if (!error) {
-            addTask(inputValue.trim())
+            addTask(inputValue.trim(), id)
         }
         setInputValue('')
     }
 
     const onSetFilterHandler = (value: filterType) => {
-        setTasksFilter(value)
+        setTasksFilter(value, id)
+    }
+
+    const removeTasksListOnClickHandler = () => {
+        removeTasksList(id)
     }
 
     return (
         <div className={todoClasses}>
-            <h3>{title}</h3>
+            <h3>{title}<button onClick={removeTasksListOnClickHandler}>X</button></h3>
             <div>
                 <input className={`input ${error && 'error-input'}`}
                        placeholder={'Enter task title, please'}

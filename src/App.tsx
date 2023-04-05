@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import './App.css';
 import TodoList from "./components/TodoList";
 import {v1} from "uuid";
+import {AddItemComponent} from "./components/AddItemComponent";
 
 export type TodoLIstType = {
     id: string
@@ -15,7 +16,7 @@ export type TaskType = {
     isDone: boolean
 }
 export type TasksType = {
-    [key: string]: TaskType[]
+    [todoListsId: string]: TaskType[]
 }
 
 function App(): JSX.Element {
@@ -63,6 +64,21 @@ function App(): JSX.Element {
         setTasks({...tasks, [todoListsId]: updateTasks})
     }
 
+    function changeTaskTitle(taskId: string, title: string, todoListsId: string) {
+        let updateTasks = tasks[todoListsId]
+            .map(task => task.id === taskId ? {...task, title: title} : task)
+        setTasks({...tasks, [todoListsId]: updateTasks})
+    }
+
+    const changeTodoListTitle = (newTitle: string, todoListsId: string) => {
+        setTodoLists(todoLists
+            .map(tl => tl.id === todoListsId
+                ? {...tl, title: newTitle}
+                : tl))
+
+    }
+
+
     function getTasksForRender(tasksList: Array<TaskType>, filterValue: filterType) {
         switch (filterValue) {
             case 'active':
@@ -77,11 +93,18 @@ function App(): JSX.Element {
     function removeTasksList(todoListsId: string) {
         setTodoLists(todoLists.filter((tl) => tl.id !== todoListsId))
         delete tasks[todoListsId]
-        setTasks({...tasks})
     }
+
+    function addTodoList(title: string) {
+        const newTodoList: TodoLIstType = {id: v1(), title: title, filter: 'all'}
+        setTodoLists([newTodoList, ...todoLists])
+        setTasks({...tasks, [newTodoList.id]: []})
+    }
+
 
     return (
         <div className="App">
+            <AddItemComponent addItem={addTodoList}/>
             {todoLists.map(tl => {
                 return (
                     <TodoList
@@ -89,12 +112,15 @@ function App(): JSX.Element {
                         id={tl.id}
                         title={tl.title}
                         tasks={getTasksForRender(tasks[tl.id], tl.filter)}
+                        filter={tl.filter}
                         removeTask={removeTask}
-                        setTasksFilter={setTasksFilter}
                         addTask={addTask}
                         changeTaskStatus={changeTaskStatus}
+                        changeTaskTitle={changeTaskTitle}
+                        setTasksFilter={setTasksFilter}
                         removeTasksList={removeTasksList}
-                        filter={tl.filter}/>
+                        changeTodoListTitle={changeTodoListTitle}
+                    />
                 )
             })}
         </div>

@@ -1,5 +1,7 @@
-import React, {ChangeEvent, useState} from 'react';
-import {filterType, TasksType, TaskType} from "../App";
+import React, {ChangeEvent} from 'react';
+import {filterType, TaskType} from "../App";
+import {AddItemComponent} from "./AddItemComponent";
+import {EditableSpan} from "./EditableSpan";
 
 
 type TodoListPropsType = {
@@ -10,6 +12,8 @@ type TodoListPropsType = {
     setTasksFilter: (value: filterType, todoListsId: string) => void
     addTask: (title: string, todoListsId: string) => void
     changeTaskStatus: (taskId: string, isDone: boolean, todoListsId: string) => void
+    changeTaskTitle: (taskId: string, title: string, todoListsId: string) => void
+    changeTodoListTitle: (newTitle: string, todoListsId: string) => void
     removeTasksList: (todoListsId: string) => void
     filter: filterType
 }
@@ -22,15 +26,13 @@ const TodoList: React.FC<TodoListPropsType> = (
         tasks,
         removeTask,
         changeTaskStatus,
+        changeTaskTitle,
         setTasksFilter,
         filter,
         addTask,
-        removeTasksList
+        removeTasksList,
+        changeTodoListTitle
     }) => {
-
-    let [inputValue, setInputValue] = useState('')
-    let [error, setError] = useState<string | null>(null)
-
 
     let isAllTasksNotDone = true
     for (let i = 0; i < tasks.length; i++) {
@@ -49,14 +51,18 @@ const TodoList: React.FC<TodoListPropsType> = (
             changeTaskStatus(task.id, e.currentTarget.checked, id)
         }
 
+        const changeTaskTitleHandler = (newTitle: string) => {
+            changeTaskTitle(task.id, newTitle, id)
+        }
+
         return (
             <li key={task.id}>
                 <input type="checkbox"
                        checked={task.isDone}
                        onChange={onChangeTaskStatusHandler}/>
-                <span className={task.isDone ? 'is-done' : 'task-title'}>
-                    {task.title}
-                </span>
+                <EditableSpan title={task.title}
+                              isDone={task.isDone}
+                              changeTitle={changeTaskTitleHandler}/>
                 <button onClick={onRemoveTaskClickHandler}>
                     x
                 </button>
@@ -65,56 +71,26 @@ const TodoList: React.FC<TodoListPropsType> = (
         )
     })
 
-    const maxTitleLength = 20
-
-    const onChangeInputValueHandler = (event: ChangeEvent<HTMLInputElement>) => {
-        setInputValue(event.currentTarget.value)
-        setError(null)
-        if (event.currentTarget.value.trim().length > maxTitleLength) {
-            setError('Title is too long!!!')
-        }
-        if (event.currentTarget.value.trim().length === 0) {
-            setError('Title can not be empty')
-        }
+    const onAddTaskClickHandler = (title: string) => {
+        addTask(title, id)
     }
-
-    const onKeyUpAddTaskHandler = (event: React.KeyboardEvent<HTMLInputElement>) => {
-        if (event.ctrlKey && event.key === 'Enter') {
-            onAddTaskClickHandler()
-        }
-    }
-
-    const onAddTaskClickHandler = () => {
-        if (!error) {
-            addTask(inputValue.trim(), id)
-        }
-        setInputValue('')
-    }
-
     const onSetFilterHandler = (value: filterType) => {
         setTasksFilter(value, id)
     }
-
     const removeTasksListOnClickHandler = () => {
         removeTasksList(id)
     }
 
+    const changeTodoListTitleHandler = (newTitle: string) => {
+        changeTodoListTitle(newTitle, id)
+    }
+
     return (
         <div className={todoClasses}>
-            <h3>{title}<button onClick={removeTasksListOnClickHandler}>X</button></h3>
-            <div>
-                <input className={`input ${error && 'error-input'}`}
-                       placeholder={'Enter task title, please'}
-                       value={inputValue}
-                       onChange={onChangeInputValueHandler}
-                       onKeyUp={onKeyUpAddTaskHandler}/>
-
-                <button disabled={inputValue.length === 0}
-                        onClick={onAddTaskClickHandler}>
-                    +
-                </button>
-                {error && <div className={'error'}>{error}</div>}
-            </div>
+            <h3><EditableSpan title={title} changeTitle={changeTodoListTitleHandler}/>
+                <button onClick={removeTasksListOnClickHandler}>X</button>
+            </h3>
+            <AddItemComponent addItem={onAddTaskClickHandler}/>
             <ul>
                 {todoListItems}
             </ul>
@@ -140,3 +116,4 @@ const TodoList: React.FC<TodoListPropsType> = (
 };
 
 export default TodoList;
+

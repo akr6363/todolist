@@ -3,6 +3,21 @@ import './App.css';
 import TodoList from "./components/TodoList";
 import {v1} from "uuid";
 import {AddItemComponent} from "./components/AddItemComponent";
+import {
+    AppBar,
+    Button, Checkbox,
+    Container, createTheme, CssBaseline, FormControlLabel,
+    FormGroup,
+    Grid,
+    IconButton,
+    Paper,
+    ThemeProvider,
+    Toolbar,
+    Typography
+} from "@mui/material";
+import {Menu} from '@mui/icons-material';
+import {amber, lightGreen} from "@mui/material/colors";
+import exp from "constants";
 
 export type TodoLIstType = {
     id: string
@@ -19,10 +34,14 @@ export type TasksType = {
     [todoListsId: string]: TaskType[]
 }
 
+
 function App(): JSX.Element {
 
     const todoListsId_1 = v1()
     const todoListsId_2 = v1()
+
+
+    const [isDarkMode, setDarkMode] = useState<boolean>(true)
 
     const [todoLists, setTodoLists] = useState<TodoLIstType[]>([
         {id: todoListsId_1, title: 'What to learn', filter: 'all'},
@@ -102,28 +121,78 @@ function App(): JSX.Element {
     }
 
 
+    const mode = isDarkMode ? 'dark' : 'light'
+
+    const customTheme = createTheme({
+        palette: {
+            primary: amber,
+            secondary: lightGreen,
+            mode: mode
+        }
+    })
+
+
     return (
-        <div className="App">
-            <AddItemComponent addItem={addTodoList}/>
-            {todoLists.map(tl => {
-                return (
-                    <TodoList
-                        key={tl.id}
-                        id={tl.id}
-                        title={tl.title}
-                        tasks={getTasksForRender(tasks[tl.id], tl.filter)}
-                        filter={tl.filter}
-                        removeTask={removeTask}
-                        addTask={addTask}
-                        changeTaskStatus={changeTaskStatus}
-                        changeTaskTitle={changeTaskTitle}
-                        setTasksFilter={setTasksFilter}
-                        removeTasksList={removeTasksList}
-                        changeTodoListTitle={changeTodoListTitle}
-                    />
-                )
-            })}
-        </div>
+        <ThemeProvider theme={customTheme}>
+            <CssBaseline/>
+            <div className="App">
+                <AppBar position="static">
+                    <Toolbar>
+                        <IconButton
+                            size="large"
+                            edge="start"
+                            color="inherit"
+                            aria-label="menu"
+                            sx={{mr: 2}}
+                        >
+                            <Menu/>
+                        </IconButton>
+                        <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
+                            TodoLists
+                        </Typography>
+                        <FormGroup>
+                            <FormControlLabel
+                                control={<Checkbox
+                                    onChange={(e)=>setDarkMode(e.currentTarget.checked)} />}
+                                label={isDarkMode ? "Light mode" : "Dark mode"}
+                            />
+                        </FormGroup>
+
+                        <Button color="inherit">Login</Button>
+                    </Toolbar>
+                </AppBar>
+                <Container fixed>
+                    <Grid container sx={{p: '15px 0'}}>
+                        <AddItemComponent addItem={addTodoList}/>
+                    </Grid>
+                    <Grid container spacing={4}>
+                        {todoLists.map(tl => {
+                            return (
+                                <Grid item>
+                                    <Paper elevation={4}>
+                                        <TodoList
+                                            key={tl.id}
+                                            id={tl.id}
+                                            title={tl.title}
+                                            tasks={getTasksForRender(tasks[tl.id], tl.filter)}
+                                            filter={tl.filter}
+                                            removeTask={removeTask}
+                                            addTask={addTask}
+                                            changeTaskStatus={changeTaskStatus}
+                                            changeTaskTitle={changeTaskTitle}
+                                            setTasksFilter={setTasksFilter}
+                                            removeTasksList={removeTasksList}
+                                            changeTodoListTitle={changeTodoListTitle}
+                                        />
+                                    </Paper>
+                                </Grid>
+                            )
+                        })}
+                    </Grid>
+
+                </Container>
+            </div>
+        </ThemeProvider>
     );
 }
 

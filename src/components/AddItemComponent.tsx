@@ -1,4 +1,6 @@
 import React, {ChangeEvent, useState} from "react";
+import AddIcon from '@mui/icons-material/Add';
+import {IconButton, TextField} from "@mui/material";
 
 type AddItemComponentPropsType = {
     addItem: (title: string) => void
@@ -35,18 +37,21 @@ export const AddItemComponent: React.FC<AddItemComponentPropsType> = ({addItem})
     }
 
     return (
-        <div>
-            <input className={`input ${error && 'error-input'}`}
-                   placeholder={'Enter task title, please'}
-                   value={inputValue}
-                   onChange={onChangeInputValueHandler}
-                   onKeyUp={onKeyUpAddTaskHandler}/>
-
-            <button disabled={inputValue.length === 0}
-                    onClick={onAddTaskClickHandler}>
-                +
-            </button>
-            {error && <div className={'error'}>{error}</div>}
+        <div className={'add-from'}>
+            <TextField
+                       placeholder={'Enter task title, please'}
+                       value={inputValue}
+                       onChange={onChangeInputValueHandler}
+                       onKeyUp={onKeyUpAddTaskHandler}
+                       error={!!error}
+            size={'small'}
+            helperText={error}>
+            </TextField>
+            <IconButton disabled={inputValue.length === 0}
+                        onClick={onAddTaskClickHandler}>
+                <AddIcon/>
+            </IconButton>
+            {/*{error && <div className={'error'}>{error}</div>}*/}
         </div>
     )
 }

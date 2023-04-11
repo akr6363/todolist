@@ -2,6 +2,8 @@ import React, {ChangeEvent} from 'react';
 import {filterType, TaskType} from "../App";
 import {AddItemComponent} from "./AddItemComponent";
 import {EditableSpan} from "./EditableSpan";
+import {Button, Checkbox, IconButton, List, ListItem, Typography} from "@mui/material";
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 
 type TodoListPropsType = {
@@ -34,16 +36,6 @@ const TodoList: React.FC<TodoListPropsType> = (
         changeTodoListTitle
     }) => {
 
-    let isAllTasksNotDone = true
-    for (let i = 0; i < tasks.length; i++) {
-        if (tasks[i].isDone) {
-            isAllTasksNotDone = false;
-            break;
-        }
-    }
-
-    const todoClasses = isAllTasksNotDone ? "todolist-empty" : "todolist"
-
     const todoListItems: Array<JSX.Element> = tasks.map((task) => {
 
         const onRemoveTaskClickHandler = () => removeTask(task.id, id)
@@ -56,17 +48,25 @@ const TodoList: React.FC<TodoListPropsType> = (
         }
 
         return (
-            <li key={task.id}>
-                <input type="checkbox"
-                       checked={task.isDone}
-                       onChange={onChangeTaskStatusHandler}/>
+            <ListItem key={task.id}
+                      divider
+                      disablePadding
+                      secondaryAction={
+                          <IconButton onClick={onRemoveTaskClickHandler}
+                                      size={'small'}>
+                              <DeleteForeverIcon/>
+                          </IconButton>
+                      }>
+                <Checkbox
+                    edge={'start'}
+                    color={'secondary'}
+                    size={'small'}
+                    checked={task.isDone}
+                    onChange={onChangeTaskStatusHandler}/>
                 <EditableSpan title={task.title}
                               isDone={task.isDone}
                               changeTitle={changeTaskTitleHandler}/>
-                <button onClick={onRemoveTaskClickHandler}>
-                    x
-                </button>
-            </li>
+            </ListItem>
 
         )
     })
@@ -86,34 +86,50 @@ const TodoList: React.FC<TodoListPropsType> = (
     }
 
     return (
-        <div className={todoClasses}>
-            <h3><EditableSpan title={title} changeTitle={changeTodoListTitleHandler}/>
-                <button onClick={removeTasksListOnClickHandler}>X</button>
-            </h3>
+        <div className={'todolist'}>
+            <Typography variant={'h5'} align='center' fontWeight='bold' gutterBottom>
+                <EditableSpan title={title} changeTitle={changeTodoListTitleHandler}/>
+                <Button onClick={removeTasksListOnClickHandler}
+                        variant={'contained'}
+                        size={'small'}
+                        endIcon={<DeleteForeverIcon/>}
+                        sx={{ml: '10px'}}>
+                    DEL
+                </Button>
+
+            </Typography>
             <AddItemComponent addItem={onAddTaskClickHandler}/>
-            <ul>
+            <List>
                 {todoListItems}
-            </ul>
-            <div>
-                <button className={filter === 'all' ? 'active-filter' : ''}
+            </List>
+            <div className={'btn-container'}>
+                <Button variant='contained'
+                        size='small'
+                        disableElevation
+                        color={filter === 'all' ? 'primary' : 'secondary'}
                         onClick={() => {
                             onSetFilterHandler('all')
                         }}>All
-                </button>
-                <button className={filter === 'active' ? 'active-filter' : ''}
+                </Button>
+                <Button variant='contained'
+                        size='small'
+                        disableElevation
+                        color={filter === 'active' ? 'primary' : 'secondary'}
                         onClick={() => {
                             onSetFilterHandler('active')
                         }}>Active
-                </button>
-                <button className={filter === 'completed' ? 'active-filter' : ''}
+                </Button>
+                <Button variant='contained'
+                        size='small'
+                        disableElevation
+                        color={filter === 'completed' ? 'primary' : 'secondary'}
                         onClick={() => {
                             onSetFilterHandler('completed')
                         }}>Completed
-                </button>
+                </Button>
             </div>
         </div>
     );
 };
 
 export default TodoList;
-

@@ -39,7 +39,6 @@ function App(): JSX.Element {
     const todoListsId_1 = v1()
     const todoListsId_2 = v1()
 
-
     const [isDarkMode, setDarkMode] = useState<boolean>(false)
 
     const [todoLists, setTodoLists] = useState<TodoLIstType[]>([
@@ -64,37 +63,44 @@ function App(): JSX.Element {
         let newTasksList = tasks[todoListsId].filter((task) => task.id !== taskId)
         setTasks({...tasks, [todoListsId]: newTasksList})
     }
-
     function addTask(title: string, todoListsId: string) {
         let newTask: TaskType = {id: v1(), title: title, isDone: false}
         let newTasksList = [newTask, ...tasks[todoListsId]]
         setTasks({...tasks, [todoListsId]: newTasksList})
     }
-
-    function setTasksFilter(value: filterType, todoListsId: string) {
-        setTodoLists(todoLists
-            .map((tl) => tl.id === todoListsId ? {...tl, filter: value} : tl))
-    }
-
     function changeTaskStatus(taskId: string, isDone: boolean, todoListsId: string) {
         let updateTasks = tasks[todoListsId]
             .map(task => task.id === taskId ? {...task, isDone: isDone} : task)
         setTasks({...tasks, [todoListsId]: updateTasks})
     }
-
     function changeTaskTitle(taskId: string, title: string, todoListsId: string) {
         let updateTasks = tasks[todoListsId]
             .map(task => task.id === taskId ? {...task, title: title} : task)
         setTasks({...tasks, [todoListsId]: updateTasks})
     }
 
-    const changeTodoListTitle = (newTitle: string, todoListsId: string) => {
+
+    function setTasksFilter(value: filterType, todoListsId: string) {
+        setTodoLists(todoLists
+            .map((tl) => tl.id === todoListsId ? {...tl, filter: value} : tl))
+    }
+    function changeTodoListTitle(newTitle: string, todoListsId: string) {
         setTodoLists(todoLists
             .map(tl => tl.id === todoListsId
                 ? {...tl, title: newTitle}
                 : tl))
 
     }
+    function removeTasksList(todoListsId: string) {
+        setTodoLists(todoLists.filter((tl) => tl.id !== todoListsId))
+        delete tasks[todoListsId]
+    }
+    function addTodoList(title: string) {
+        const newTodoList: TodoLIstType = {id: v1(), title: title, filter: 'all'}
+        setTodoLists([newTodoList, ...todoLists])
+        setTasks({...tasks, [newTodoList.id]: []})
+    }
+
 
 
     function getTasksForRender(tasksList: Array<TaskType>, filterValue: filterType) {
@@ -108,19 +114,6 @@ function App(): JSX.Element {
         }
     }
 
-    function removeTasksList(todoListsId: string) {
-        setTodoLists(todoLists.filter((tl) => tl.id !== todoListsId))
-        delete tasks[todoListsId]
-    }
-
-    function addTodoList(title: string) {
-        const newTodoList: TodoLIstType = {id: v1(), title: title, filter: 'all'}
-        setTodoLists([newTodoList, ...todoLists])
-        setTasks({...tasks, [newTodoList.id]: []})
-    }
-
-
-
     const customTheme = createTheme({
         palette: {
             primary: {
@@ -133,7 +126,6 @@ function App(): JSX.Element {
             mode: isDarkMode ? 'dark' : 'light'
         }
     })
-
 
     return (
         <ThemeProvider theme={customTheme}>

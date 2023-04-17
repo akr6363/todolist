@@ -2,8 +2,19 @@ import React, {ChangeEvent} from 'react';
 import {filterType, TaskType} from "../App";
 import {AddItemComponent} from "./AddItemComponent";
 import {EditableSpan} from "./EditableSpan";
-import {Button, Checkbox, IconButton, List, ListItem, Typography} from "@mui/material";
+import {
+    Button,
+    Checkbox,
+    Grid,
+    IconButton,
+    List,
+    ListItem,
+    ListItemButton,
+    ListItemIcon, ListItemText,
+    Typography
+} from "@mui/material";
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import ClearIcon from '@mui/icons-material/Clear';
 
 
 type TodoListPropsType = {
@@ -48,27 +59,43 @@ const TodoList: React.FC<TodoListPropsType> = (
         }
 
         return (
-            <ListItem key={task.id}
-                      divider
-                      disablePadding
-                      secondaryAction={
-                          <IconButton onClick={onRemoveTaskClickHandler}
-                                      size={'small'}>
-                              <DeleteForeverIcon/>
-                          </IconButton>
-                      }>
-                <Checkbox
-                    edge={'start'}
-                    color={'secondary'}
-                    size={'small'}
-                    checked={task.isDone}
-                    onChange={onChangeTaskStatusHandler}/>
-                <EditableSpan title={task.title}
-                              isDone={task.isDone}
-                              changeTitle={changeTaskTitleHandler}/>
+            <ListItem
+                key={task.id}
+                secondaryAction={
+                    <IconButton edge="end" onClick={onRemoveTaskClickHandler}>
+                        <DeleteForeverIcon/>
+                    </IconButton>
+                }
+                disablePadding
+            >
+                <ListItemButton sx={{
+                    padding: '0 10px',
+                }}>
+                    <ListItemIcon sx={{
+                        minWidth: '30px',
+                        margin: 0,
+                    }}
+                    >
+                        <Checkbox
+                            edge="start"
+                            checked={task.isDone}
+                            size={'small'}
+                            disableRipple
+                            color={'secondary'}
+                            onChange={onChangeTaskStatusHandler}
+                        />
+                    </ListItemIcon>
+                    <ListItemText sx={{
+                        width: '100%',
+                        margin: 0,
+                    }}>
+                        <EditableSpan title={task.title}
+                                      isDone={task.isDone}
+                                      changeTitle={changeTaskTitleHandler}/>
+                    </ListItemText>
+                </ListItemButton>
             </ListItem>
-
-        )
+        );
     })
 
     const onAddTaskClickHandler = (title: string) => {
@@ -85,24 +112,43 @@ const TodoList: React.FC<TodoListPropsType> = (
         changeTodoListTitle(newTitle, id)
     }
 
+    const styles = {
+        fontFamily: "Roboto",
+        fontWeight: 500,
+        fontSize: '1.25rem',
+        lineHeight: 1.6,
+        letterSpacing: '0.0075em',
+        marginTop: '-6px'
+    }
+
     return (
         <div className={'todolist'}>
-            <Typography variant={'h5'} align='center' fontWeight='bold' gutterBottom>
-                <EditableSpan title={title} changeTitle={changeTodoListTitleHandler}/>
-                <Button onClick={removeTasksListOnClickHandler}
-                        variant={'contained'}
-                        size={'small'}
-                        endIcon={<DeleteForeverIcon/>}
-                        sx={{ml: '10px'}}>
-                    DEL
-                </Button>
-
+            <Typography variant={'h6'} align='left' gutterBottom
+                        sx={{display: 'flex', justifyContent: 'space-between'}}>
+                <EditableSpan title={title}
+                              changeTitle={changeTodoListTitleHandler}
+                              styles={styles}/>
+                <IconButton onClick={removeTasksListOnClickHandler}
+                            size={'small'}
+                            disableRipple
+                            className="delete-todo-button">
+                    <ClearIcon/>
+                </IconButton>
             </Typography>
-            <AddItemComponent addItem={onAddTaskClickHandler}/>
+            <Grid container sx={{p: '5px 0'}} justifyContent={"center"}>
+                <AddItemComponent addItem={onAddTaskClickHandler} title={'Add a task'}/>
+            </Grid>
             <List>
-                {todoListItems}
+                {
+                    todoListItems.length ?
+                        todoListItems :
+                        <Grid container sx={{p: '0 0 10px 0'}} justifyContent={"center"}>
+                            Your todo-list is empty
+                        </Grid>
+                }
+
             </List>
-            <div className={'btn-container'}>
+            <Grid container className={'btn-container'}>
                 <Button variant='contained'
                         size='small'
                         disableElevation
@@ -127,7 +173,8 @@ const TodoList: React.FC<TodoListPropsType> = (
                             onSetFilterHandler('completed')
                         }}>Completed
                 </Button>
-            </div>
+            </Grid>
+
         </div>
     );
 };

@@ -17,7 +17,6 @@ import {
 } from "@mui/material";
 import {Menu} from '@mui/icons-material';
 import {amber, lightGreen} from "@mui/material/colors";
-import exp from "constants";
 
 export type TodoLIstType = {
     id: string
@@ -41,7 +40,7 @@ function App(): JSX.Element {
     const todoListsId_2 = v1()
 
 
-    const [isDarkMode, setDarkMode] = useState<boolean>(true)
+    const [isDarkMode, setDarkMode] = useState<boolean>(false)
 
     const [todoLists, setTodoLists] = useState<TodoLIstType[]>([
         {id: todoListsId_1, title: 'What to learn', filter: 'all'},
@@ -121,13 +120,17 @@ function App(): JSX.Element {
     }
 
 
-    const mode = isDarkMode ? 'dark' : 'light'
 
     const customTheme = createTheme({
         palette: {
-            primary: amber,
-            secondary: lightGreen,
-            mode: mode
+            primary: {
+                main: '#afafaf',
+            },
+            secondary: amber,
+            background: {
+                default: '#f1f1f1',
+            },
+            mode: isDarkMode ? 'dark' : 'light'
         }
     })
 
@@ -162,16 +165,15 @@ function App(): JSX.Element {
                     </Toolbar>
                 </AppBar>
                 <Container fixed>
-                    <Grid container sx={{p: '15px 0'}}>
-                        <AddItemComponent addItem={addTodoList}/>
+                    <Grid container sx={{p: '15px 0'}} justifyContent={"center"}>
+                        <AddItemComponent addItem={addTodoList} title={'Add new list'}/>
                     </Grid>
                     <Grid container spacing={4}>
                         {todoLists.map(tl => {
                             return (
-                                <Grid item>
-                                    <Paper elevation={4}>
+                                <Grid item xs={12} sm={6} md={4} key={tl.id}>
+                                    <Paper elevation={4} sx={{p: '15px 15px'}}>
                                         <TodoList
-                                            key={tl.id}
                                             id={tl.id}
                                             title={tl.title}
                                             tasks={getTasksForRender(tasks[tl.id], tl.filter)}

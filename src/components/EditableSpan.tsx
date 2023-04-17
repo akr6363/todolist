@@ -1,16 +1,18 @@
-import React, {ChangeEvent, useState} from "react";
+import React, {ChangeEvent, FocusEvent, useState} from "react";
 import {TextField} from "@mui/material";
 
 type EditableSpanPropsType = {
     title: string
     isDone?: boolean
     changeTitle: (newTitle: string) => void
+    styles?: React.CSSProperties
 }
 export const EditableSpan: React.FC<EditableSpanPropsType> = (
     {
         title,
         isDone,
-        changeTitle
+        changeTitle,
+        styles
     }) => {
 
     const [isEdit, setIsEdit] = useState<boolean>(false)
@@ -27,7 +29,6 @@ export const EditableSpan: React.FC<EditableSpanPropsType> = (
     }
 
     const changeValueHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        debugger
         setInputValue(e.currentTarget.value)
     }
 
@@ -37,15 +38,29 @@ export const EditableSpan: React.FC<EditableSpanPropsType> = (
         }
     }
 
+    const onFocusHandler = (e: FocusEvent<HTMLInputElement>) => {
+        e.currentTarget.select()
+    }
+
     return (
         isEdit
-            ? <TextField variant={'standard'}
+            ? <TextField sx={{
+                width: '100%',
+                marginRight: '5px',
+                marginTop: '5px',
+                '& input': styles
+            }}
+                         InputProps={{
+                             disableUnderline: !styles,
+                         }}
+                         variant={'standard'}
                          size={'small'}
                          onBlur={editTitleTasks}
                          onKeyUp={onKeyUpEditTitleTasksHandler}
                          value={inputValue}
                          type="text"
                          autoFocus
+                         onFocus={onFocusHandler}
                          onChange={changeValueHandler}/>
             : <span onDoubleClick={setEditMode}
                     className={isDone ? 'is-done' : 'task-title'}>

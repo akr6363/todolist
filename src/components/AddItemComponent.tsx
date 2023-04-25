@@ -56,7 +56,7 @@ export const AddItemComponent: React.FC<AddItemComponentPropsType> = ({addItem, 
             {!editMode
                 ? <Button
                     sx={{
-                        marginBottom: '9.5px'
+                        marginBottom: '9px'
                     }}
                     onClick={() => setEditMode(true)}
                     variant={"text"}

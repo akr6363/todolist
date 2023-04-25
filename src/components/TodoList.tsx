@@ -13,7 +13,7 @@ import {
     ListItemIcon, ListItemText,
     Typography
 } from "@mui/material";
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import DeleteIcon from '@mui/icons-material/Delete';
 import ClearIcon from '@mui/icons-material/Clear';
 
 
@@ -62,20 +62,16 @@ const TodoList: React.FC<TodoListPropsType> = (
             <ListItem
                 key={task.id}
                 secondaryAction={
-                    <IconButton edge="end" onClick={onRemoveTaskClickHandler}>
-                        <DeleteForeverIcon/>
+                    <IconButton className={'delete-todo-button'} edge="end"
+                                onClick={onRemoveTaskClickHandler} disableRipple>
+                        <DeleteIcon sx={{
+                            fontSize: '20px'
+                        }}/>
                     </IconButton>
-                }
-                disablePadding
-            >
+                } disablePadding>
                 <ListItemButton sx={{
                     padding: '0 10px',
                 }}>
-                    <ListItemIcon sx={{
-                        minWidth: '30px',
-                        margin: 0,
-                    }}
-                    >
                         <Checkbox
                             edge="start"
                             checked={task.isDone}
@@ -84,15 +80,9 @@ const TodoList: React.FC<TodoListPropsType> = (
                             color={'secondary'}
                             onChange={onChangeTaskStatusHandler}
                         />
-                    </ListItemIcon>
-                    <ListItemText sx={{
-                        width: '100%',
-                        margin: 0,
-                    }}>
                         <EditableSpan title={task.title}
                                       isDone={task.isDone}
                                       changeTitle={changeTaskTitleHandler}/>
-                    </ListItemText>
                 </ListItemButton>
             </ListItem>
         );

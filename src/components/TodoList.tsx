@@ -15,20 +15,19 @@ import {
 } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import ClearIcon from '@mui/icons-material/Clear';
+import {useDispatch, useSelector} from "react-redux";
+import {AppRootStateType} from "../state/store";
+import {TasksType} from "../AppWithRedux";
+import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from "../state/tasks-reducer";
 
 
 type TodoListPropsType = {
     id: string
     title: string,
-    tasks: Array<TaskType>,
-    removeTask: (taskId: string, todoListId: string) => void
-    setTasksFilter: (value: filterType, todoListsId: string) => void
-    addTask: (title: string, todoListsId: string) => void
-    changeTaskStatus: (taskId: string, isDone: boolean, todoListsId: string) => void
-    changeTaskTitle: (taskId: string, title: string, todoListsId: string) => void
-    changeTodoListTitle: (newTitle: string, todoListsId: string) => void
-    removeTasksList: (todoListsId: string) => void
     filter: filterType
+    setTasksFilter: (value: filterType, todoListsId: string) => void
+    removeTasksList: (todoListsId: string) => void
+    changeTodoListTitle: (newTitle: string, todoListsId: string) => void
 }
 
 
@@ -36,26 +35,35 @@ const TodoList: React.FC<TodoListPropsType> = (
     {
         id,
         title,
-        tasks,
-        removeTask,
-        changeTaskStatus,
-        changeTaskTitle,
         setTasksFilter,
         filter,
-        addTask,
         removeTasksList,
         changeTodoListTitle
     }) => {
 
-    const todoListItems: Array<JSX.Element> = tasks.map((task) => {
+    const dispatch = useDispatch()
+    const tasks = useSelector<AppRootStateType, TasksType>(state => state.tasks)
 
-        const onRemoveTaskClickHandler = () => removeTask(task.id, id)
+    function getTasksForRender(tasksList: Array<TaskType>, filterValue: filterType) {
+        switch (filterValue) {
+            case 'active':
+                return tasksList.filter((task) => !task.isDone)
+            case 'completed':
+                return tasksList.filter((task) => task.isDone)
+            default:
+                return tasksList
+        }
+    }
+
+    const todoListItems: Array<JSX.Element> = getTasksForRender(tasks[id], filter).map((task) => {
+
+        const onRemoveTaskClickHandler = () => dispatch(removeTaskAC(task.id, id))
         const onChangeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
-            changeTaskStatus(task.id, e.currentTarget.checked, id)
+            dispatch(changeTaskStatusAC(task.id, id, e.currentTarget.checked))
         }
 
         const changeTaskTitleHandler = (newTitle: string) => {
-            changeTaskTitle(task.id, newTitle, id)
+            dispatch(changeTaskTitleAC(task.id, id, newTitle))
         }
 
         return (
@@ -89,7 +97,7 @@ const TodoList: React.FC<TodoListPropsType> = (
     })
 
     const onAddTaskClickHandler = (title: string) => {
-        addTask(title, id)
+        dispatch(addTaskAC(title, id))
     }
     const onSetFilterHandler = (value: filterType) => {
         setTasksFilter(value, id)

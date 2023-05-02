@@ -27,7 +27,6 @@ export const AddItemComponent: React.FC<AddItemComponentPropsType> = ({addItem, 
     }
 
     const onAddTaskClickHandler = () => {
-
         if (!error) {
             addItem(inputValue.trim())
         }

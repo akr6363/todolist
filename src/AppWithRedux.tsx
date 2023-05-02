@@ -48,24 +48,10 @@ function AppWithRedux(): JSX.Element {
 
     const dispatch = useDispatch()
     const todoLists = useSelector<AppRootStateType, TodoLIstType[]>(state => state.todoLists)
-    const tasks = useSelector<AppRootStateType, TasksType>(state => state.tasks)
+
 
     const [isDarkMode, setDarkMode] = useState<boolean>(false)
 
-
-
-    function removeTask(taskId: string, todoListsId: string) {
-        dispatch(removeTaskAC(taskId, todoListsId))
-    }
-    function addTask(title: string, todoListsId: string) {
-        dispatch(addTaskAC(title, todoListsId))
-    }
-    function changeTaskStatus(taskId: string, isDone: boolean, todoListsId: string) {
-        dispatch(changeTaskStatusAC(taskId, todoListsId, isDone))
-    }
-    function changeTaskTitle(taskId: string, title: string, todoListsId: string) {
-        dispatch(changeTaskTitleAC(taskId, todoListsId, title))
-    }
 
 
     function setTasksFilter(value: filterType, todoListsId: string) {
@@ -83,16 +69,7 @@ function AppWithRedux(): JSX.Element {
     }
 
 
-    function getTasksForRender(tasksList: Array<TaskType>, filterValue: filterType) {
-        switch (filterValue) {
-            case 'active':
-                return tasksList.filter((task) => !task.isDone)
-            case 'completed':
-                return tasksList.filter((task) => task.isDone)
-            default:
-                return tasksList
-        }
-    }
+
 
     const customTheme = createTheme({
         palette: {
@@ -148,12 +125,7 @@ function AppWithRedux(): JSX.Element {
                                         <TodoList
                                             id={tl.id}
                                             title={tl.title}
-                                            tasks={getTasksForRender(tasks[tl.id], tl.filter)}
                                             filter={tl.filter}
-                                            removeTask={removeTask}
-                                            addTask={addTask}
-                                            changeTaskStatus={changeTaskStatus}
-                                            changeTaskTitle={changeTaskTitle}
                                             setTasksFilter={setTasksFilter}
                                             removeTasksList={removeTasksList}
                                             changeTodoListTitle={changeTodoListTitle}

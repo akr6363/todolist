@@ -1,6 +1,6 @@
 import {TasksType} from "../App";
 import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, tasksReducer} from "./tasks-reducer";
-import {RemoveTodoListAC} from "./todolist-reducer";
+import {removeTodoListAC} from "./todolist-reducer";
 
 let startTasks: TasksType;
 
@@ -73,7 +73,7 @@ test('task title should be changed', () => {
 })
 
 test('tasks array should be deleted for deleted todo list', () => {
-    const endTasks = tasksReducer(startTasks, RemoveTodoListAC('todoListsId_1'))
+    const endTasks = tasksReducer(startTasks, removeTodoListAC('todoListsId_1'))
     expect(endTasks).toEqual({
         ['todoListsId_2']: [
             {id: '1', title: 'Milk', isDone: true},

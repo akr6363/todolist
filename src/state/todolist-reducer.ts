@@ -2,7 +2,6 @@ import {filterType, TodoLIstType} from "../App";
 import {v1} from "uuid";
 
 
-
 // export type setTasksFilterActionType = {
 //     type: 'SET-TASKS-FILTER'
 //     todoListsId: string

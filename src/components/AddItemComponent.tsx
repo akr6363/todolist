@@ -1,7 +1,6 @@
-import React, {ChangeEvent, MouseEventHandler, useRef, useState} from "react";
+import React, {ChangeEvent, useState} from "react";
 import {Button, IconButton, TextField} from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
-import {Block} from "@mui/icons-material";
 
 type AddItemComponentPropsType = {
     addItem: (title: string) => void

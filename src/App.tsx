@@ -1,7 +1,6 @@
-import React, {useReducer, useState} from 'react';
+import React, {useState} from 'react';
 import './App.css';
 import TodoList from "./components/TodoList";
-import {v1} from "uuid";
 import {AddItemComponent} from "./components/AddItemComponent";
 import {
     AppBar,
@@ -16,15 +15,8 @@ import {
     Typography
 } from "@mui/material";
 import {Menu} from '@mui/icons-material';
-import {amber, lightGreen} from "@mui/material/colors";
-import {
-    addTodoListAC,
-    changeTodoListTitleAC,
-    removeTodoListAC,
-    setTasksFilterAC,
-    todoListReducer
-} from "./state/todolist-reducer";
-import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, tasksReducer} from "./state/tasks-reducer";
+import {amber} from "@mui/material/colors";
+import {addTodoListAC} from "./state/todolist-reducer";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "./state/store";
 
@@ -43,33 +35,16 @@ export type TasksType = {
     [todoListsId: string]: TaskType[]
 }
 
-
-function AppWithRedux(): JSX.Element {
+function App(): JSX.Element {
 
     const dispatch = useDispatch()
     const todoLists = useSelector<AppRootStateType, TodoLIstType[]>(state => state.todoLists)
 
-
     const [isDarkMode, setDarkMode] = useState<boolean>(false)
 
-
-
-    function setTasksFilter(value: filterType, todoListsId: string) {
-        dispatch(setTasksFilterAC(todoListsId, value))
-    }
-    function changeTodoListTitle(newTitle: string, todoListsId: string) {
-        dispatch(changeTodoListTitleAC(newTitle, todoListsId))
-
-    }
-    function removeTasksList(todoListsId: string) {
-        dispatch(removeTodoListAC(todoListsId))
-    }
     function addTodoList(title: string) {
         dispatch(addTodoListAC(title))
     }
-
-
-
 
     const customTheme = createTheme({
         palette: {
@@ -105,7 +80,7 @@ function AppWithRedux(): JSX.Element {
                         <FormGroup>
                             <FormControlLabel
                                 control={<Checkbox
-                                    onChange={(e)=>setDarkMode(e.currentTarget.checked)} />}
+                                    onChange={(e) => setDarkMode(e.currentTarget.checked)}/>}
                                 label={isDarkMode ? "Light mode" : "Dark mode"}
                             />
                         </FormGroup>
@@ -123,12 +98,7 @@ function AppWithRedux(): JSX.Element {
                                 <Grid item xs={12} sm={6} md={4} key={tl.id}>
                                     <Paper elevation={4} sx={{p: '15px 15px'}}>
                                         <TodoList
-                                            id={tl.id}
-                                            title={tl.title}
-                                            filter={tl.filter}
-                                            setTasksFilter={setTasksFilter}
-                                            removeTasksList={removeTasksList}
-                                            changeTodoListTitle={changeTodoListTitle}
+                                            todoList={tl}
                                         />
                                     </Paper>
                                 </Grid>
@@ -142,4 +112,4 @@ function AppWithRedux(): JSX.Element {
     );
 }
 
-export default AppWithRedux;
+export default App;

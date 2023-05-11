@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import './App.css';
 import TodoList from "./components/TodoList";
 import {AddItemComponent} from "./components/AddItemComponent";
@@ -36,15 +36,15 @@ export type TasksType = {
 }
 
 function App(): JSX.Element {
-
+console.log('APP IS CALLED')
     const dispatch = useDispatch()
     const todoLists = useSelector<AppRootStateType, TodoLIstType[]>(state => state.todoLists)
 
     const [isDarkMode, setDarkMode] = useState<boolean>(false)
 
-    function addTodoList(title: string) {
+    const addTodoList = useCallback((title: string) => {
         dispatch(addTodoListAC(title))
-    }
+    }, [dispatch])
 
     const customTheme = createTheme({
         palette: {
@@ -58,6 +58,7 @@ function App(): JSX.Element {
             mode: isDarkMode ? 'dark' : 'light'
         }
     })
+
 
     return (
         <ThemeProvider theme={customTheme}>
@@ -84,7 +85,6 @@ function App(): JSX.Element {
                                 label={isDarkMode ? "Light mode" : "Dark mode"}
                             />
                         </FormGroup>
-
                         <Button color="inherit">Login</Button>
                     </Toolbar>
                 </AppBar>

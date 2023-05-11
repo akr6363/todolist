@@ -7,7 +7,10 @@ type EditableSpanPropsType = {
     changeTitle: (newTitle: string) => void
     styles?: React.CSSProperties
 }
-export const EditableSpan: React.FC<EditableSpanPropsType> = (
+
+
+
+export const EditableSpan: React.FC<EditableSpanPropsType> = React.memo((
     {
         title,
         isDone,
@@ -15,6 +18,7 @@ export const EditableSpan: React.FC<EditableSpanPropsType> = (
         styles
     }) => {
 
+    console.log('EditableSpan IS CALLED' +  title)
     const [isEdit, setIsEdit] = useState<boolean>(false)
     const [inputValue, setInputValue] = useState<string>('')
 
@@ -67,4 +71,4 @@ export const EditableSpan: React.FC<EditableSpanPropsType> = (
                     {title}
             </span>
     )
-}
+})

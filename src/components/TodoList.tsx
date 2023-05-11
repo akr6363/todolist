@@ -1,23 +1,14 @@
-import React, {ChangeEvent} from 'react';
+import React, {useCallback, useMemo} from 'react';
 import {filterType, TaskType, TodoLIstType} from "../App";
 import {AddItemComponent} from "./AddItemComponent";
 import {EditableSpan} from "./EditableSpan";
-import {
-    Button,
-    Checkbox,
-    Grid,
-    IconButton,
-    List,
-    ListItem,
-    ListItemButton,
-    Typography
-} from "@mui/material";
-import DeleteIcon from '@mui/icons-material/Delete';
+import {Button, Grid, IconButton, List, Typography} from "@mui/material";
 import ClearIcon from '@mui/icons-material/Clear';
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "../state/store";
-import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from "../state/tasks-reducer";
+import {addTaskAC} from "../state/tasks-reducer";
 import {changeTodoListTitleAC, removeTodoListAC, setTasksFilterAC} from "../state/todolist-reducer";
+import {Task} from "./Task";
 
 
 type TodoListPropsType = {
@@ -25,14 +16,14 @@ type TodoListPropsType = {
 }
 
 
-const TodoList: React.FC<TodoListPropsType> = ({todoList}) => {
-
+const TodoList: React.FC<TodoListPropsType> = React.memo(({todoList}) => {
+    console.log('TodoList IS CALLED')
     const {id, title, filter} = todoList
 
     const dispatch = useDispatch()
     const tasks = useSelector<AppRootStateType, TaskType[]>(state => state.tasks[id])
 
-    function getTasksForRender(tasksList: Array<TaskType>, filterValue: filterType) {
+    const getTasksForRender = (tasksList: Array<TaskType>, filterValue: filterType) => {
         switch (filterValue) {
             case 'active':
                 return tasksList.filter((task) => !task.isDone)
@@ -43,69 +34,39 @@ const TodoList: React.FC<TodoListPropsType> = ({todoList}) => {
         }
     }
 
-    const todoListItems: Array<JSX.Element> = getTasksForRender(tasks, filter).map((task) => {
-        const onRemoveTaskClickHandler = () =>{
-            dispatch(removeTaskAC(task.id, id))
-        }
-        const onChangeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
-            dispatch(changeTaskStatusAC(task.id, id, e.currentTarget.checked))
-        }
-        const changeTaskTitleHandler = (newTitle: string) => {
-            dispatch(changeTaskTitleAC(task.id, id, newTitle))
-        }
 
+    const todoListItems: Array<JSX.Element> = getTasksForRender(tasks, filter).map((task) => {
         return (
-            <ListItem
-                key={task.id}
-                secondaryAction={
-                    <IconButton className={'delete-todo-button'} edge="end"
-                                onClick={onRemoveTaskClickHandler} disableRipple>
-                        <DeleteIcon sx={{
-                            fontSize: '20px'
-                        }}/>
-                    </IconButton>
-                } disablePadding>
-                <ListItemButton sx={{
-                    padding: '0 10px',
-                }}>
-                        <Checkbox
-                            edge="start"
-                            checked={task.isDone}
-                            size={'small'}
-                            disableRipple
-                            color={'secondary'}
-                            onChange={onChangeTaskStatusHandler}
-                        />
-                        <EditableSpan title={task.title}
-                                      isDone={task.isDone}
-                                      changeTitle={changeTaskTitleHandler}/>
-                </ListItemButton>
-            </ListItem>
-        );
+            <Task task={task} todolistID={id} key={task.id}/>
+        )
     })
 
-    const onAddTaskClickHandler = (title: string) => {
+    const onAddTaskClickHandler = useCallback((title: string) => {
         dispatch(addTaskAC(title, id))
-    }
-    const onSetFilterHandler = (value: filterType) => {
+    }, [dispatch, id])
+
+    const onSetFilterHandler = useCallback((value: filterType) => {
         dispatch(setTasksFilterAC(id, value))
-    }
+    }, [dispatch, id])
+
     const removeTasksListOnClickHandler = () => {
         dispatch(removeTodoListAC(id))
     }
-    const changeTodoListTitleHandler = (newTitle: string) => {
+    const changeTodoListTitleHandler = useCallback((newTitle: string) => {
         dispatch(changeTodoListTitleAC(newTitle, id))
-    }
+    }, [dispatch, id])
 
 
-    const styles = {
-        fontFamily: "Roboto",
-        fontWeight: 500,
-        fontSize: '1.25rem',
-        lineHeight: 1.6,
-        letterSpacing: '0.0075em',
-        marginTop: '-6px'
-    }
+    const styles = useMemo(() => {
+        return {
+            fontFamily: "Roboto",
+            fontWeight: 500,
+            fontSize: '1.25rem',
+            lineHeight: 1.6,
+            letterSpacing: '0.0075em',
+            marginTop: '-6px'
+        }
+    }, [])
 
     return (
         <div className={'todolist'}>
@@ -135,34 +96,57 @@ const TodoList: React.FC<TodoListPropsType> = ({todoList}) => {
 
             </List>
             <Grid container className={'btn-container'}>
-                <Button variant='contained'
-                        size='small'
-                        disableElevation
-                        color={filter === 'all' ? 'primary' : 'secondary'}
-                        onClick={() => {
-                            onSetFilterHandler('all')
-                        }}>All
-                </Button>
-                <Button variant='contained'
-                        size='small'
-                        disableElevation
-                        color={filter === 'active' ? 'primary' : 'secondary'}
-                        onClick={() => {
-                            onSetFilterHandler('active')
-                        }}>Active
-                </Button>
-                <Button variant='contained'
-                        size='small'
-                        disableElevation
-                        color={filter === 'completed' ? 'primary' : 'secondary'}
-                        onClick={() => {
-                            onSetFilterHandler('completed')
-                        }}>Completed
-                </Button>
+                <ButtonMemo title={'All'}
+                            variant='contained'
+                            size='small'
+                            disableElevation
+                            color={filter === 'all' ? 'primary' : 'secondary'}
+                            onClick={() => {
+                                onSetFilterHandler('all')
+                            }}/>
+                <ButtonMemo title={'Active'}
+                            variant='contained'
+                            size='small'
+                            disableElevation
+                            color={filter === 'active' ? 'primary' : 'secondary'}
+                            onClick={() => {
+                                onSetFilterHandler('active')
+                            }}/>
+                <ButtonMemo title={'Completed'}
+                            variant='contained'
+                            size='small'
+                            disableElevation
+                            color={filter === 'completed' ? 'primary' : 'secondary'}
+                            onClick={() => {
+                                onSetFilterHandler('completed')
+                            }}/>
             </Grid>
-
         </div>
     );
-};
+});
 
 export default TodoList;
+
+//ButtonMemo перерисовывается потмоу что передаем callBack в атрибуты
+
+type ButtonMemoPropsType = {
+    title: string
+    variant:  'text' | 'outlined' | 'contained'
+    size?: 'small' | 'medium' | 'large'
+    disableElevation?: boolean
+    color: 'inherit' | 'primary' | 'secondary' | 'success' | 'error' | 'info' | 'warning'
+    onClick: () => void
+}
+
+
+const ButtonMemo: React.FC<ButtonMemoPropsType> = (
+    {title, variant, size, color, disableElevation = false, onClick}) => {
+    return (
+        <Button variant={variant}
+                size={size}
+                disableElevation = {disableElevation}
+                color={color}
+                onClick={onClick}>{title}
+        </Button>
+    )
+}

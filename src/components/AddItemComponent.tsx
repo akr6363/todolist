@@ -2,7 +2,7 @@ import React, {ChangeEvent, memo, useState} from "react";
 import {Button, IconButton, TextField} from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 
-type AddItemComponentPropsType = {
+export type AddItemComponentPropsType = {
     addItem: (title: string) => void
     title: string
 }

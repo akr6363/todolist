@@ -19,6 +19,8 @@ import {amber} from "@mui/material/colors";
 import {addTodoListAC} from "./state/todolist-reducer";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "./state/store";
+import {darkTheme, lightTheme} from "./assets/styles/customTheme";
+
 
 export type TodoLIstType = {
     id: string
@@ -46,22 +48,22 @@ console.log('APP IS CALLED')
         dispatch(addTodoListAC(title))
     }, [dispatch])
 
-    const customTheme = createTheme({
-        palette: {
-            primary: {
-                main: '#afafaf',
-            },
-            secondary: amber,
-            background: {
-                default: '#f1f1f1',
-            },
-            mode: isDarkMode ? 'dark' : 'light'
-        }
-    })
+    // const customTheme = createTheme({
+    //     palette: {
+    //         primary: {
+    //             main: '#afafaf',
+    //         },
+    //         secondary: amber,
+    //         background: {
+    //             default: '#f1f1f1',
+    //         },
+    //         // mode: isDarkMode ? 'dark' : 'light'
+    //     }
+    // })
 
 
     return (
-        <ThemeProvider theme={customTheme}>
+        <ThemeProvider theme={lightTheme}>
             <CssBaseline/>
             <div className="App">
                 <AppBar position="static">

@@ -1,9 +1,9 @@
 import type {Meta, StoryObj} from '@storybook/react';
 import React, {ChangeEvent, useCallback} from "react";
-import {Task, TaskPropsType} from "./Task";
-import {Provider, useDispatch, useSelector} from "react-redux";
-import {AppRootStateType, store} from "../state/store";
-import {changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from "../state/tasks-reducer";
+import {Task} from "./Task";
+import {useDispatch, useSelector} from "react-redux";
+import {AppRootStateType} from "../state/store";
+import {changeTaskStatusAC, changeTaskTitleAC} from "../state/tasks-reducer";
 import {Checkbox, IconButton, ListItem, ListItemButton} from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {EditableSpan} from "./EditableSpan";
@@ -23,8 +23,10 @@ export default meta;
 
 type Story = StoryObj<typeof Task>;
 
+const TaskCopy = () => {
+    const task = useSelector<AppRootStateType, TaskType>(state => state.tasks['todolistId1'][0])
 
-const TaskStories: React.FC<TaskPropsType> = React.memo(({task, todolistID}) => {
+    let todolistID = 'todolistId1'
 
     const dispatch = useDispatch()
 
@@ -42,7 +44,7 @@ const TaskStories: React.FC<TaskPropsType> = React.memo(({task, todolistID}) => 
             key={task.id}
             secondaryAction={
                 <IconButton className={'delete-todo-button'} edge="end"
-                            onClick={action('remove task')} disableRipple>
+                            onClick={action('removeTask')} disableRipple>
                     <DeleteIcon sx={{
                         fontSize: '20px'
                     }}/>
@@ -65,30 +67,8 @@ const TaskStories: React.FC<TaskPropsType> = React.memo(({task, todolistID}) => 
             </ListItemButton>
         </ListItem>
     );
-})
+}
 
-
-
-const TaskStoriesWithTaskIsDone: React.FC<{ todolistID: string }> = ({ todolistID }) => {
-    const task = useSelector<AppRootStateType, TaskType>(
-        state => state.tasks[todolistID][0]
-    );
-    return <TaskStories task={task} todolistID={todolistID} />;
-};
-
-const TaskStoriesWithTaskIsNotDone: React.FC<{ todolistID: string }> = ({ todolistID }) => {
-    const task = useSelector<AppRootStateType, TaskType>(
-        state => state.tasks[todolistID][1]
-    );
-    return <TaskStories task={task} todolistID={todolistID} />;
-};
-
-export const TaskIsDone: Story = {
-    render: () => <TaskStoriesWithTaskIsDone todolistID={'todolistId1'}/>
-
-};
-export const TaskIsNotDone: Story = {
-    render: () => <TaskStoriesWithTaskIsNotDone todolistID={'todolistId1'}/>
-
-};
-
+export const Task1Story: Story = {
+    render: () => <TaskCopy />
+}

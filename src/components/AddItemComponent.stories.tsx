@@ -6,7 +6,7 @@ import AddIcon from "@mui/icons-material/Add";
 import React, {FC} from "react";
 
 const meta: Meta<typeof AddItemComponent> = {
-    title: 'TODOLISTS/AddItemComponent',
+    title: 'TODOLISTS/EditableSpan',
     component: AddItemComponent,
     tags: ['autodocs'],
     argTypes: {

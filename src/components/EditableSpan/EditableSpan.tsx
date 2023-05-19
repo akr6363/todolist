@@ -1,5 +1,6 @@
-import React, {ChangeEvent, FocusEvent, useState} from "react";
+import React from "react";
 import {TextField} from "@mui/material";
+import {useEditableSpan} from "./hooks/useEditableSpan";
 
 type EditableSpanPropsType = {
     title: string
@@ -7,7 +8,6 @@ type EditableSpanPropsType = {
     changeTitle: (newTitle: string) => void
     styles?: React.CSSProperties
 }
-
 
 
 export const EditableSpan: React.FC<EditableSpanPropsType> = React.memo((
@@ -18,33 +18,16 @@ export const EditableSpan: React.FC<EditableSpanPropsType> = React.memo((
         styles
     }) => {
 
-    console.log('EditableSpan IS CALLED' +  title)
-    const [isEdit, setIsEdit] = useState<boolean>(false)
-    const [inputValue, setInputValue] = useState<string>('')
-
-    const setEditMode = () => {
-        setIsEdit(true)
-        setInputValue(title)
-    }
-
-    const editTitleTasks = () => {
-        setIsEdit(false)
-        changeTitle(inputValue)
-    }
-
-    const changeValueHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        setInputValue(e.currentTarget.value)
-    }
-
-    const onKeyUpEditTitleTasksHandler = (event: React.KeyboardEvent<HTMLInputElement>) => {
-        if (event.key === 'Enter') {
-            editTitleTasks()
-        }
-    }
-
-    const onFocusHandler = (e: FocusEvent<HTMLInputElement>) => {
-        e.currentTarget.select()
-    }
+    console.log('EditableSpan IS CALLED' + title)
+    const {
+        isEdit,
+        inputValue,
+        setEditMode,
+        editTitleTasks,
+        changeValueHandler,
+        onKeyUpEditTitleTasksHandler,
+        onFocusHandler
+    } = useEditableSpan(title, changeTitle)
 
     return (
         isEdit

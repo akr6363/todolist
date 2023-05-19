@@ -1,6 +1,6 @@
 import React, {useCallback, useState} from 'react';
 import './App.css';
-import TodoList from "./components/TodoList";
+import TodoList from "./components/Todolist/TodoList";
 import {AddItemComponent} from "./components/AddItemComponent";
 import {
     AppBar,

@@ -6,7 +6,7 @@ import {AppRootStateType} from "../state/store";
 import {changeTaskStatusAC, changeTaskTitleAC} from "../state/tasks-reducer";
 import {Checkbox, IconButton, ListItem, ListItemButton} from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import {EditableSpan} from "./EditableSpan";
+import {EditableSpan} from "./EditableSpan/EditableSpan";
 import {action} from "@storybook/addon-actions";
 import {ReduxStoreProviderDecorator} from "../state/reduxStoreProviderDecorator";
 import {TaskType} from "../App";

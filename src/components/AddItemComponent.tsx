@@ -8,7 +8,7 @@ export type AddItemComponentPropsType = {
 }
 export const AddItemComponent: React.FC<AddItemComponentPropsType> =
     memo( ({addItem, title}) => {
-        console.log('AddItemComponent IS CALLED' )
+        console.log('EditableSpan IS CALLED' )
         const maxTitleLength = 20
 
         let [inputValue, setInputValue] = useState('')

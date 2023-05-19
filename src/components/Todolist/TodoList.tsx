@@ -1,61 +1,37 @@
 import React, {useCallback, useMemo} from 'react';
-import {filterType, TaskType, TodoLIstType} from "../App";
-import {AddItemComponent} from "./AddItemComponent";
-import {EditableSpan} from "./EditableSpan";
+import {filterType, TaskType, TodoLIstType} from "../../App";
+import {AddItemComponent} from "../AddItemComponent";
+import {EditableSpan} from "../EditableSpan/EditableSpan";
 import {Button, Grid, IconButton, List, Typography} from "@mui/material";
 import ClearIcon from '@mui/icons-material/Clear';
 import {useDispatch, useSelector} from "react-redux";
-import {AppRootStateType} from "../state/store";
-import {addTaskAC} from "../state/tasks-reducer";
-import {changeTodoListTitleAC, removeTodoListAC, setTasksFilterAC} from "../state/todolist-reducer";
-import {Task} from "./Task";
+import {AppRootStateType} from "../../state/store";
+import {addTaskAC} from "../../state/tasks-reducer";
+import {changeTodoListTitleAC, removeTodoListAC, setTasksFilterAC} from "../../state/todolist-reducer";
+import {Task} from "../Task";
+import {useTodoList} from "./hooks/useTodoList";
 
 
 type TodoListPropsType = {
     todoList: TodoLIstType
 }
 
-
 const TodoList: React.FC<TodoListPropsType> = React.memo(({todoList}) => {
-    console.log('TodoList IS CALLED')
     const {id, title, filter} = todoList
 
-    const dispatch = useDispatch()
-    const tasks = useSelector<AppRootStateType, TaskType[]>(state => state.tasks[id])
-
-    const getTasksForRender = (tasksList: Array<TaskType>, filterValue: filterType) => {
-        switch (filterValue) {
-            case 'active':
-                return tasksList.filter((task) => !task.isDone)
-            case 'completed':
-                return tasksList.filter((task) => task.isDone)
-            default:
-                return tasksList
-        }
-    }
-
+    const {
+        tasks, getTasksForRender,
+        onAddTaskClickHandler,
+        onSetFilterHandler,
+        removeTasksListOnClickHandler,
+        changeTodoListTitleHandler,
+    } = useTodoList(id)
 
     const todoListItems: Array<JSX.Element> = getTasksForRender(tasks, filter).map((task) => {
         return (
             <Task task={task} todolistID={id} key={task.id}/>
         )
     })
-
-    const onAddTaskClickHandler = useCallback((title: string) => {
-        dispatch(addTaskAC(title, id))
-    }, [dispatch, id])
-
-    const onSetFilterHandler = useCallback((value: filterType) => {
-        dispatch(setTasksFilterAC(id, value))
-    }, [dispatch, id])
-
-    const removeTasksListOnClickHandler = () => {
-        dispatch(removeTodoListAC(id))
-    }
-    const changeTodoListTitleHandler = useCallback((newTitle: string) => {
-        dispatch(changeTodoListTitleAC(newTitle, id))
-    }, [dispatch, id])
-
 
     const styles = useMemo(() => {
         return {
@@ -131,7 +107,7 @@ export default TodoList;
 
 type ButtonMemoPropsType = {
     title: string
-    variant:  'text' | 'outlined' | 'contained'
+    variant: 'text' | 'outlined' | 'contained'
     size?: 'small' | 'medium' | 'large'
     disableElevation?: boolean
     color: 'inherit' | 'primary' | 'secondary' | 'success' | 'error' | 'info' | 'warning'
@@ -144,7 +120,7 @@ const ButtonMemo: React.FC<ButtonMemoPropsType> = (
     return (
         <Button variant={variant}
                 size={size}
-                disableElevation = {disableElevation}
+                disableElevation={disableElevation}
                 color={color}
                 onClick={onClick}>{title}
         </Button>

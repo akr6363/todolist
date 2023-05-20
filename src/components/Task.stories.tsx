@@ -9,7 +9,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import {EditableSpan} from "./EditableSpan/EditableSpan";
 import {action} from "@storybook/addon-actions";
 import {ReduxStoreProviderDecorator} from "../state/reduxStoreProviderDecorator";
-import {TaskType} from "../App";
+import {TaskType, TodoLIstType} from "../App";
 
 
 const meta: Meta<typeof Task> = {

@@ -3,22 +3,21 @@ import {
     addTodoListAC,
     changeTodoListTitleAC,
     removeTodoListAC,
-    setTasksFilterAC,
+    setTasksFilterAC, TodolistBLLType,
     todoListReducer
 } from "./todolist-reducer";
-import {TodoLIstType} from "../App";
 
 
 let todoListsId_1: string
 let todoListsId_2: string
-let startState: TodoLIstType[];
+let startState: TodolistBLLType[];
 
 beforeEach(() => {
     todoListsId_1 = v1()
     todoListsId_2 = v1()
     startState = [
-        {id: todoListsId_1, title: 'What to learn', filter: 'all'},
-        {id: todoListsId_2, title: 'What to buy', filter: 'all'},
+        {id: todoListsId_1, title: 'What to learn', filter: 'all', addedDate: '', order: 0},
+        {id: todoListsId_2, title: 'What to buy', filter: 'all', addedDate: '', order: 0},
     ]
 })
 

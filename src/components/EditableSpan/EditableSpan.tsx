@@ -1,10 +1,11 @@
 import React from "react";
 import {TextField} from "@mui/material";
 import {useEditableSpan} from "./hooks/useEditableSpan";
+import {TasksStatuses} from "../../api/todolists-api";
 
 type EditableSpanPropsType = {
     title: string
-    isDone?: boolean
+    isDone?: TasksStatuses
     changeTitle: (newTitle: string) => void
     styles?: React.CSSProperties
 }
@@ -50,7 +51,7 @@ export const EditableSpan: React.FC<EditableSpanPropsType> = React.memo((
                          onFocus={onFocusHandler}
                          onChange={changeValueHandler}/>
             : <span onDoubleClick={setEditMode}
-                    className={isDone ? 'is-done' : 'task-title'}>
+                    className={isDone === TasksStatuses.Completed ? 'is-done' : 'task-title'}>
                     {title}
             </span>
     )

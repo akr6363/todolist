@@ -1,11 +1,14 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import './App.css';
 import TodoList from "./components/Todolist/TodoList";
 import {AddItemComponent} from "./components/AddItemComponent";
 import {
     AppBar,
-    Button, Checkbox,
-    Container, createTheme, CssBaseline, FormControlLabel,
+    Button,
+    Checkbox,
+    Container,
+    CssBaseline,
+    FormControlLabel,
     FormGroup,
     Grid,
     IconButton,
@@ -15,32 +18,17 @@ import {
     Typography
 } from "@mui/material";
 import {Menu} from '@mui/icons-material';
-import {amber} from "@mui/material/colors";
-import {addTodoListAC} from "./state/todolist-reducer";
+import {addTodoListAC, setTodoListsAC, TodolistBLLType} from "./state/todolist-reducer";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "./state/store";
-import {darkTheme, lightTheme} from "./assets/styles/customTheme";
+import {lightTheme} from "./assets/styles/customTheme";
+import {todoListsApi} from "./api/todolists-api";
 
 
-export type TodoLIstType = {
-    id: string
-    title: string
-    filter: filterType
-}
-export type filterType = 'all' | 'active' | 'completed'
-export type TaskType = {
-    id: string,
-    title: string,
-    isDone: boolean
-}
-export type TasksType = {
-    [todoListsId: string]: TaskType[]
-}
+const App: React.FC = () => {
 
-function App(): JSX.Element {
-console.log('APP IS CALLED')
     const dispatch = useDispatch()
-    const todoLists = useSelector<AppRootStateType, TodoLIstType[]>(state => state.todoLists)
+    const todoLists = useSelector<AppRootStateType, TodolistBLLType[]>(state => state.todoLists)
 
     const [isDarkMode, setDarkMode] = useState<boolean>(false)
 
@@ -48,18 +36,12 @@ console.log('APP IS CALLED')
         dispatch(addTodoListAC(title))
     }, [dispatch])
 
-    // const customTheme = createTheme({
-    //     palette: {
-    //         primary: {
-    //             main: '#afafaf',
-    //         },
-    //         secondary: amber,
-    //         background: {
-    //             default: '#f1f1f1',
-    //         },
-    //         // mode: isDarkMode ? 'dark' : 'light'
-    //     }
-    // })
+    useEffect(()=> {
+        todoListsApi.getTodoLists()
+            .then(data => {
+                dispatch(setTodoListsAC(data))
+            })
+    }, [])
 
 
     return (

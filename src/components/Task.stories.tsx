@@ -9,7 +9,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import {EditableSpan} from "./EditableSpan/EditableSpan";
 import {action} from "@storybook/addon-actions";
 import {ReduxStoreProviderDecorator} from "../state/reduxStoreProviderDecorator";
-import {TaskType, TodoLIstType} from "../App";
+import {TaskType} from "../api/todolists-api";
 
 
 const meta: Meta<typeof Task> = {
@@ -55,14 +55,14 @@ const TaskCopy = () => {
             }}>
                 <Checkbox
                     edge="start"
-                    checked={task.isDone}
+                    checked={!!task.status}
                     size={'small'}
                     disableRipple
                     color={'secondary'}
                     onChange={onChangeTaskStatusHandler}
                 />
                 <EditableSpan title={task.title}
-                              isDone={task.isDone}
+                              isDone={task.status}
                               changeTitle={changeTaskTitleHandler}/>
             </ListItemButton>
         </ListItem>

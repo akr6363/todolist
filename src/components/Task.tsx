@@ -4,7 +4,7 @@ import {changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from "../state/task
 import {Checkbox, IconButton, ListItem, ListItemButton} from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {EditableSpan} from "./EditableSpan/EditableSpan";
-import {TaskType} from "../App";
+import {TasksStatuses, TaskType} from "../api/todolists-api";
 
 
 export type TaskPropsType = {
@@ -42,14 +42,14 @@ export const Task: React.FC<TaskPropsType> = React.memo(({task, todolistID}) => 
             }}>
                 <Checkbox
                     edge="start"
-                    checked={task.isDone}
+                    checked={task.status === TasksStatuses.New ? false : true}
                     size={'small'}
                     disableRipple
                     color={'secondary'}
                     onChange={onChangeTaskStatusHandler}
                 />
                 <EditableSpan title={task.title}
-                              isDone={task.isDone}
+                              isDone={task.status}
                               changeTitle={changeTaskTitleHandler}/>
             </ListItemButton>
         </ListItem>

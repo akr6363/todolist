@@ -1,7 +1,9 @@
 import TodoList from "./TodoList";
 import {Meta, StoryObj} from "@storybook/react";
 import {ReduxStoreProviderDecorator} from "../../state/reduxStoreProviderDecorator";
-import {TodoLIstType} from "../../App";
+import {TodolistType} from "../../api/todolists-api";
+import {TodolistBLLType} from "../../state/todolist-reducer";
+
 
 
 const meta: Meta<typeof TodoList> = {
@@ -17,7 +19,8 @@ type Story = StoryObj<typeof TodoList>;
 
 const TodoListStory = () => {
     //const todoList = useSelector<AppRootStateType, TodoLIstType>(state => state.todoLists[0])
-   const todoList: TodoLIstType = {id: "todolistId2", title: "What to buy", filter: "all"}
+
+   const todoList: TodolistBLLType = {id: "todolistId2", title: "What to buy", filter: "all", addedDate: '', order: 0}
 
     return <TodoList todoList={todoList}/>
 }

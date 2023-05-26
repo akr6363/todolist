@@ -1,22 +1,29 @@
-import React, {ChangeEvent, FocusEvent, useCallback, useMemo, useState} from "react";
+import {useCallback, useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "../../../state/store";
-import {filterType, TaskType} from "../../../App";
-import {Task} from "../../Task";
-import {addTaskAC} from "../../../state/tasks-reducer";
-import {changeTodoListTitleAC, removeTodoListAC, setTasksFilterAC} from "../../../state/todolist-reducer";
+import {addTaskAC, setTasksAC} from "../../../state/tasks-reducer";
+import {changeTodoListTitleAC, filterType, removeTodoListAC, setTasksFilterAC,} from "../../../state/todolist-reducer";
+import {TasksStatuses, TaskType, todoListsApi} from "../../../api/todolists-api";
 
 export const useTodoList = ( id: string) => {
 
     const dispatch = useDispatch()
     const tasks = useSelector<AppRootStateType, TaskType[]>(state => state.tasks[id])
 
+    useEffect(()=> {
+        todoListsApi.getTasks(id)
+            .then(data => {
+                dispatch(setTasksAC(id, data.items))
+            })
+    }, [])
+
+
     const getTasksForRender = (tasksList: Array<TaskType>, filterValue: filterType) => {
         switch (filterValue) {
             case 'active':
-                return tasksList.filter((task) => !task.isDone)
+                return tasksList.filter((task) => task.status === TasksStatuses.New)
             case 'completed':
-                return tasksList.filter((task) => task.isDone)
+                return tasksList.filter((task) => task.status === TasksStatuses.Completed)
             default:
                 return tasksList
         }

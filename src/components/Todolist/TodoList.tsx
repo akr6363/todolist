@@ -1,23 +1,27 @@
-import React, {useCallback, useMemo} from 'react';
-import {filterType, TaskType, TodoLIstType} from "../../App";
+import React, {useEffect, useMemo} from 'react';
+import {} from "../../App";
 import {AddItemComponent} from "../AddItemComponent";
 import {EditableSpan} from "../EditableSpan/EditableSpan";
 import {Button, Grid, IconButton, List, Typography} from "@mui/material";
 import ClearIcon from '@mui/icons-material/Clear';
-import {useDispatch, useSelector} from "react-redux";
-import {AppRootStateType} from "../../state/store";
-import {addTaskAC} from "../../state/tasks-reducer";
-import {changeTodoListTitleAC, removeTodoListAC, setTasksFilterAC} from "../../state/todolist-reducer";
 import {Task} from "../Task";
 import {useTodoList} from "./hooks/useTodoList";
+import {TodolistBLLType} from "../../state/todolist-reducer";
+import {todoListsApi} from "../../api/todolists-api";
+import {setTasksAC} from "../../state/tasks-reducer";
+import {useDispatch} from "react-redux";
 
 
 type TodoListPropsType = {
-    todoList: TodoLIstType
+    todoList: TodolistBLLType
 }
 
 const TodoList: React.FC<TodoListPropsType> = React.memo(({todoList}) => {
     const {id, title, filter} = todoList
+
+
+
+
 
     const {
         tasks, getTasksForRender,
@@ -27,11 +31,17 @@ const TodoList: React.FC<TodoListPropsType> = React.memo(({todoList}) => {
         changeTodoListTitleHandler,
     } = useTodoList(id)
 
-    const todoListItems: Array<JSX.Element> = getTasksForRender(tasks, filter).map((task) => {
+
+
+
+    const todoListItems: Array<JSX.Element> =
+        tasks ?
+        getTasksForRender(tasks, filter).map((task) => {
         return (
             <Task task={task} todolistID={id} key={task.id}/>
         )
-    })
+    }) : []
+
 
     const styles = useMemo(() => {
         return {

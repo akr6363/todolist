@@ -1,9 +1,8 @@
-import {TasksType, TodoLIstType} from "../App";
-import {addTodoListAC, todoListReducer} from "./todolist-reducer";
-import {tasksReducer} from "./tasks-reducer";
+import {addTodoListAC, TodolistBLLType, todoListReducer} from "./todolist-reducer";
+import {tasksReducer, TasksType} from "./tasks-reducer";
 
 test('tasks array for added todolist also should be added ', () => {
-    const startTodoLists: TodoLIstType[] = []
+    const startTodoLists: TodolistBLLType[] = []
     const startTasks: TasksType = {}
 
     const action = addTodoListAC('new todo')

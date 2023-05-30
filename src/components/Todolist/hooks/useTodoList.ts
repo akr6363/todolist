@@ -1,20 +1,16 @@
 import {useCallback, useEffect} from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {AppRootStateType} from "../../../state/store";
-import {addTaskAC, setTasksAC} from "../../../state/tasks-reducer";
+import {addTaskAC, fetchTasksTC} from "../../../state/tasks-reducer";
 import {changeTodoListTitleAC, filterType, removeTodoListAC, setTasksFilterAC,} from "../../../state/todolist-reducer";
-import {TasksStatuses, TaskType, todoListsApi} from "../../../api/todolists-api";
+import {TasksStatuses, TaskType} from "../../../api/todolists-api";
+import {useAppDispatch, useAppSelector} from "../../../state/hooks";
 
 export const useTodoList = ( id: string) => {
 
-    const dispatch = useDispatch()
-    const tasks = useSelector<AppRootStateType, TaskType[]>(state => state.tasks[id])
+    const dispatch = useAppDispatch()
+    const tasks = useAppSelector(state => state.tasks[id])
 
     useEffect(()=> {
-        todoListsApi.getTasks(id)
-            .then(data => {
-                dispatch(setTasksAC(id, data.items))
-            })
+        dispatch(fetchTasksTC(id))
     }, [])
 
 

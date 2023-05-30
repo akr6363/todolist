@@ -3,7 +3,7 @@ import {
     addTodoListAC,
     changeTodoListTitleAC,
     removeTodoListAC,
-    setTasksFilterAC, TodolistBLLType,
+    setTasksFilterAC, setTodoListsAC, TodolistBLLType,
     todoListReducer
 } from "./todolist-reducer";
 
@@ -47,5 +47,18 @@ test('todo list title should be changed', () => {
     const endState = todoListReducer(startState, changeTodoListTitleAC(newTitle, todoListsId_2))
     expect(endState[1].title).toBe(newTitle)
     expect(endState[0].title).toBe('What to learn')
+})
+
+test('todo lists should be received', () => {
+    startState = []
+    const todoListFromServer = [
+        {id: '1', title: 'todoListFromServer1', filter: 'all', addedDate: '', order: 0},
+        {id: '2', title: 'todoListFromServer2', filter: 'all', addedDate: '', order: 0},
+    ]
+    const endState = todoListReducer(startState, setTodoListsAC(todoListFromServer))
+    expect(endState).toEqual([
+        {id: '1', title: 'todoListFromServer1', filter: 'all', addedDate: '', order: 0},
+        {id: '2', title: 'todoListFromServer2', filter: 'all', addedDate: '', order: 0},
+    ])
 })
 

@@ -1,5 +1,13 @@
-import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, tasksReducer, TasksType} from "./tasks-reducer";
-import {removeTodoListAC} from "./todolist-reducer";
+import {
+    addTaskAC,
+    changeTaskStatusAC,
+    changeTaskTitleAC,
+    removeTaskAC,
+    setTasksAC,
+    tasksReducer,
+    TasksType
+} from "./tasks-reducer";
+import {removeTodoListAC, setTodoListsAC} from "./todolist-reducer";
 
 let startTasks: TasksType;
 
@@ -129,5 +137,51 @@ test('tasks array should be deleted for deleted todo list', () => {
                 addedDate: '', deadline: '', description: '', order: 0, priority: 0, startDate: '',
             },
         ],
+    })
+})
+
+
+test('empty tasks array should be created for each todo list', () => {
+    const todoLists = [
+        {id: 'todoListsId_1', title: 'todoListFromServer1', filter: 'all', addedDate: '', order: 0},
+        {id: 'todoListsId_2', title: 'todoListFromServer2', filter: 'all', addedDate: '', order: 0},
+    ]
+
+    const endTasks = tasksReducer({}, setTodoListsAC(todoLists))
+    expect(endTasks).toEqual({
+        ['todoListsId_1']: [],
+        ['todoListsId_2']: [],
+    })
+})
+
+test('tasks should be set to todo list', () => {
+    const startState = {
+        ['todoListsId_1']: [],
+        ['todoListsId_2']: [],
+    }
+    const tasks = [
+        {
+            id: '1', title: 'HTML', status: 0, todoListId: 'todoListsId_1',
+            addedDate: '', deadline: '', description: '', order: 0, priority: 0, startDate: '',
+        },
+        {
+            id: '2', title: 'CSS', status: 1, todoListId: 'todoListsId_2',
+            addedDate: '', deadline: '', description: '', order: 0, priority: 0, startDate: '',
+        },
+    ]
+
+    const endTasks = tasksReducer(startState, setTasksAC('todoListsId_1', tasks))
+    expect(endTasks).toEqual({
+        ['todoListsId_1']: [
+            {
+                id: '1', title: 'HTML', status: 0, todoListId: 'todoListsId_1',
+                addedDate: '', deadline: '', description: '', order: 0, priority: 0, startDate: '',
+            },
+            {
+                id: '2', title: 'CSS', status: 1, todoListId: 'todoListsId_2',
+                addedDate: '', deadline: '', description: '', order: 0, priority: 0, startDate: '',
+            },
+        ],
+        ['todoListsId_2']: [],
     })
 })

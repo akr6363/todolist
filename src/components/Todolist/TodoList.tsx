@@ -19,10 +19,6 @@ type TodoListPropsType = {
 const TodoList: React.FC<TodoListPropsType> = React.memo(({todoList}) => {
     const {id, title, filter} = todoList
 
-
-
-
-
     const {
         tasks, getTasksForRender,
         onAddTaskClickHandler,
@@ -31,17 +27,12 @@ const TodoList: React.FC<TodoListPropsType> = React.memo(({todoList}) => {
         changeTodoListTitleHandler,
     } = useTodoList(id)
 
-
-
-
     const todoListItems: Array<JSX.Element> =
-        tasks ?
         getTasksForRender(tasks, filter).map((task) => {
         return (
             <Task task={task} todolistID={id} key={task.id}/>
         )
-    }) : []
-
+    })
 
     const styles = useMemo(() => {
         return {

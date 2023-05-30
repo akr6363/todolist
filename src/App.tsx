@@ -18,17 +18,15 @@ import {
     Typography
 } from "@mui/material";
 import {Menu} from '@mui/icons-material';
-import {addTodoListAC, setTodoListsAC, TodolistBLLType} from "./state/todolist-reducer";
-import {useDispatch, useSelector} from "react-redux";
-import {AppRootStateType} from "./state/store";
+import {addTodoListAC, fetchTodoListsTC} from "./state/todolist-reducer";
 import {lightTheme} from "./assets/styles/customTheme";
-import {todoListsApi} from "./api/todolists-api";
+import {useAppDispatch, useAppSelector} from "./state/hooks";
 
 
 const App: React.FC = () => {
 
-    const dispatch = useDispatch()
-    const todoLists = useSelector<AppRootStateType, TodolistBLLType[]>(state => state.todoLists)
+    const dispatch = useAppDispatch()
+    const todoLists = useAppSelector(state => state.todoLists)
 
     const [isDarkMode, setDarkMode] = useState<boolean>(false)
 
@@ -37,12 +35,8 @@ const App: React.FC = () => {
     }, [dispatch])
 
     useEffect(()=> {
-        todoListsApi.getTodoLists()
-            .then(data => {
-                dispatch(setTodoListsAC(data))
-            })
+        dispatch(fetchTodoListsTC())
     }, [])
-
 
     return (
         <ThemeProvider theme={lightTheme}>

@@ -1,6 +1,7 @@
 import {v1} from "uuid";
-import {AddTodoListActionType, RemoveTodoListActionType} from "./todolist-reducer";
-import {TasksStatuses, TaskType} from "../api/todolists-api";
+import {AddTodoListActionType, RemoveTodoListActionType, setTodoListsACActionType} from "./todolist-reducer";
+import {TasksStatuses, TaskType, todoListsApi} from "../api/todolists-api";
+import {AppThunk} from "./store";
 
 type setTasksActionType = ReturnType<typeof setTasksAC>
 type removeTaskActionType = ReturnType<typeof removeTaskAC>
@@ -9,14 +10,15 @@ type changeTaskStatusActionType = ReturnType<typeof changeTaskStatusAC>
 type changeTaskTitleActionType = ReturnType<typeof changeTaskTitleAC>
 
 
-type TasksReducerActionType =
+export type TasksReducerActionType =
     removeTaskActionType |
     addTasksActionType |
     changeTaskStatusActionType |
     changeTaskTitleActionType |
     AddTodoListActionType |
     RemoveTodoListActionType |
-    setTasksActionType
+    setTasksActionType |
+    setTodoListsACActionType
 
 
 export type TasksType = {
@@ -86,6 +88,12 @@ export const tasksReducer = (state: TasksType = initialState, action: TasksReduc
         case 'REMOVE-TODOLIST':
             const {[action.todoListsId]: deletedTodoList, ...rest} = state
             return rest
+        case 'SET-TODOLISTS':
+            const stateCopy = {...state}
+            action.todoLists.forEach(tl => {
+                stateCopy[tl.id] = [];
+            });
+            return stateCopy
 
         case 'SET-TASKS':
             return {...state, [action.todoListsId]: action.tasks}
@@ -111,3 +119,10 @@ export const changeTaskStatusAC = (taskId: string, todoListsId: string, isDone: 
 export const changeTaskTitleAC = (taskId: string, todoListsId: string, title: string) => ({
     type: 'CHANGE-TASK-TITLE', taskId, todoListsId, title
 } as const)
+
+export const fetchTasksTC = (todolistId: string): AppThunk => (dispatch) => {
+    todoListsApi.getTasks(todolistId)
+        .then(data => {
+            dispatch(setTasksAC(todolistId, data.items))
+        })
+}

@@ -19,7 +19,6 @@ export const EditableSpan: React.FC<EditableSpanPropsType> = React.memo((
         styles
     }) => {
 
-    console.log('EditableSpan IS CALLED' + title)
     const {
         isEdit,
         inputValue,

@@ -7,7 +7,7 @@ import {AppRootStateType, AppThunk} from "./store";
 
 export type setTodoListsACActionType = ReturnType<typeof setTodoListsAC>
 export type setTasksFilterActionType = ReturnType<typeof setTasksFilterAC>
-export type RemoveTodoListActionType = ReturnType<typeof removeTodoListAC>
+export type RemoveTodoListActionType = ReturnType<typeof deleteTodoListAC>
 export type AddTodoListActionType = ReturnType<typeof addTodoListAC>
 export type ChangeTodoListTitleActionType = ReturnType<typeof changeTodoListTitleAC>
 
@@ -46,8 +46,7 @@ export const todoListReducer = (state: TodolistBLLType[] = initialState, action:
                 .filter((tl) => tl.id !== action.todoListsId)
 
         case 'ADD-TODOLIST':
-            const newTodoList: TodolistBLLType = {id: action.id, title: action.title, filter: 'all', addedDate: '', order: 0}
-            return [newTodoList, ...state]
+            return [{...action.todoList, filter: 'all'}, ...state]
 
         case 'CHANGE-TODOLIST-TITLE':
             return state
@@ -55,7 +54,7 @@ export const todoListReducer = (state: TodolistBLLType[] = initialState, action:
                     ? {...tl, title: action.newTitle}
                     : tl)
         case 'SET-TODOLISTS':
-            return action.todoLists.map(tl=> ({...tl, filter: 'all'}))
+            return action.todoLists.map(tl => ({...tl, filter: 'all'}))
 
         default:
             return state
@@ -73,15 +72,14 @@ export const setTasksFilterAC = (todoListsId: string, value: filterType) => ({
     value,
 } as const)
 
-export const removeTodoListAC = (todoListsId: string) => ({
+export const deleteTodoListAC = (todoListsId: string) => ({
     type: 'REMOVE-TODOLIST',
     todoListsId
 
 } as const)
-export const addTodoListAC = (title: string) => ({
+export const addTodoListAC = (todoList: TodolistType) => ({
     type: 'ADD-TODOLIST',
-    id: v1(),
-    title
+    todoList
 } as const)
 export const changeTodoListTitleAC = (newTitle: string, todoListsId: string) => ({
     type: 'CHANGE-TODOLIST-TITLE',
@@ -97,3 +95,27 @@ export const fetchTodoListsTC = (): AppThunk => (dispatch) => {
         })
 }
 
+// export const _asFetchTodoListsTC = (): AppThunk => async dispatch => {
+//     try {
+//         const data = await todoListsApi.getTodoLists()
+//         dispatch(setTodoListsAC(data))
+//     } catch (e: any) {
+//         throw new Error(e)
+//     }
+// }
+
+export const deleteTodoListsTC = (todoListId: string): AppThunk => (dispatch) => {
+    todoListsApi.deleteTodoList(todoListId)
+        .then(data => {
+            if(data.resultCode === 0) {
+                dispatch(deleteTodoListAC(todoListId))
+            }
+        })
+}
+
+export const addTodoListsTC = (title: string): AppThunk => (dispatch) => {
+    todoListsApi.addTodoList(title)
+        .then(data => {
+            dispatch(addTodoListAC(data.data.item))
+        })
+}

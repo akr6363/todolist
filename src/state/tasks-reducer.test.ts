@@ -7,7 +7,9 @@ import {
     tasksReducer,
     TasksType
 } from "./tasks-reducer";
-import {removeTodoListAC, setTodoListsAC} from "./todolist-reducer";
+import {deleteTodoListAC, setTodoListsAC} from "./todolist-reducer";
+import {TaskType} from "../api/todolists-api";
+import {v1} from "uuid";
 
 let startTasks: TasksType;
 
@@ -61,7 +63,22 @@ test('task should be removed', () => {
 })
 
 test('task should be added', () => {
-    const endTasks = tasksReducer(startTasks, addTaskAC('new task', 'todoListsId_1'))
+    const newTask: TaskType =
+        {
+            id: v1(),
+            title: 'new task',
+            status: 0,
+            todoListId: 'todoListsId_1',
+
+            addedDate: '',
+            deadline: '',
+            description: '',
+            order: 0,
+            priority: 0,
+            startDate: '',
+        }
+
+    const endTasks = tasksReducer(startTasks, addTaskAC(newTask, 'todoListsId_1'))
 
     expect(endTasks['todoListsId_1'].length).toBe(3)
     expect(endTasks['todoListsId_2'].length).toBe(2)
@@ -125,7 +142,7 @@ test('task title should be changed', () => {
 })
 
 test('tasks array should be deleted for deleted todo list', () => {
-    const endTasks = tasksReducer(startTasks, removeTodoListAC('todoListsId_1'))
+    const endTasks = tasksReducer(startTasks, deleteTodoListAC('todoListsId_1'))
     expect(endTasks).toEqual({
         ['todoListsId_2']: [
             {

@@ -18,7 +18,7 @@ import {
     Typography
 } from "@mui/material";
 import {Menu} from '@mui/icons-material';
-import {addTodoListAC, fetchTodoListsTC} from "./state/todolist-reducer";
+import {addTodoListAC, addTodoListsTC, fetchTodoListsTC} from "./state/todolist-reducer";
 import {lightTheme} from "./assets/styles/customTheme";
 import {useAppDispatch, useAppSelector} from "./state/hooks";
 
@@ -31,7 +31,7 @@ const App: React.FC = () => {
     const [isDarkMode, setDarkMode] = useState<boolean>(false)
 
     const addTodoList = useCallback((title: string) => {
-        dispatch(addTodoListAC(title))
+        dispatch(addTodoListsTC(title))
     }, [dispatch])
 
     useEffect(()=> {

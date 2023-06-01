@@ -1,6 +1,11 @@
 import {useCallback, useEffect} from "react";
-import {addTaskAC, fetchTasksTC} from "../../../state/tasks-reducer";
-import {changeTodoListTitleAC, filterType, removeTodoListAC, setTasksFilterAC,} from "../../../state/todolist-reducer";
+import {addTaskAC, addTaskTC, fetchTasksTC} from "../../../state/tasks-reducer";
+import {
+    changeTodoListTitleAC,
+    deleteTodoListAC, deleteTodoListsTC,
+    filterType,
+    setTasksFilterAC,
+} from "../../../state/todolist-reducer";
 import {TasksStatuses, TaskType} from "../../../api/todolists-api";
 import {useAppDispatch, useAppSelector} from "../../../state/hooks";
 
@@ -26,7 +31,7 @@ export const useTodoList = ( id: string) => {
     }
 
     const onAddTaskClickHandler = useCallback((title: string) => {
-        dispatch(addTaskAC(title, id))
+        dispatch(addTaskTC(id, title))
     }, [dispatch, id])
 
     const onSetFilterHandler = useCallback((value: filterType) => {
@@ -34,7 +39,7 @@ export const useTodoList = ( id: string) => {
     }, [dispatch, id])
 
     const removeTasksListOnClickHandler = () => {
-        dispatch(removeTodoListAC(id))
+        dispatch(deleteTodoListsTC(id))
     }
     const changeTodoListTitleHandler = useCallback((newTitle: string) => {
         dispatch(changeTodoListTitleAC(newTitle, id))

@@ -3,13 +3,13 @@ import React, {ChangeEvent, useCallback} from "react";
 import {Task} from "./Task";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "../state/store";
-import {changeTaskStatusAC, changeTaskTitleAC} from "../state/tasks-reducer";
+import {changeTaskAC} from "../state/tasks-reducer";
 import {Checkbox, IconButton, ListItem, ListItemButton} from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {EditableSpan} from "./EditableSpan/EditableSpan";
 import {action} from "@storybook/addon-actions";
 import {ReduxStoreProviderDecorator} from "../state/reduxStoreProviderDecorator";
-import {TaskType} from "../api/todolists-api";
+import {TasksStatuses, TaskType} from "../api/todolists-api";
 
 
 const meta: Meta<typeof Task> = {
@@ -31,11 +31,27 @@ const TaskCopy = () => {
     const dispatch = useDispatch()
 
     const onChangeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        dispatch(changeTaskStatusAC(task.id, todolistID, e.currentTarget.checked))
+        const model = {
+            title: task.title,
+            description: task.description,
+            status: e.currentTarget.checked ? TasksStatuses.Completed : TasksStatuses.New,
+            priority: task.priority,
+            startDate: task.startDate,
+            deadline: task.deadline,
+        }
+        dispatch(changeTaskAC(task.id, todolistID, model))
     }
 
     const changeTaskTitleHandler = useCallback((newTitle: string) => {
-        dispatch(changeTaskTitleAC(task.id, todolistID, newTitle))
+        const model = {
+            title: newTitle,
+            description: task.description,
+            status: task.status,
+            priority: task.priority,
+            startDate: task.startDate,
+            deadline: task.deadline,
+        }
+        dispatch(changeTaskAC(task.id, todolistID, model))
     }, [dispatch, task.id, todolistID])
 
 

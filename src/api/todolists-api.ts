@@ -27,26 +27,25 @@ type ResponseType<R = {}> = {
     resultCode: number
 }
 
-type updateTaskModelType = {
+export type updateTaskModelType = {
     title: string
-    // description: string | null
-    // completed: boolean
-    // status: number
-    // priority: number
-    // startDate: string | null
-    // deadline: string | null
+    description: string | null
+    status: TasksStatuses
+    priority: TasksPriorities
+    startDate: string | null
+    deadline: string | null
 }
 
 export enum TasksStatuses {
     New = 0,
-    InProgress =1,
+    InProgress = 1,
     Completed = 2,
     Draft = 3
 }
 
 export enum TasksPriorities {
     Low = 0,
-    Middle =1,
+    Middle = 1,
     Hi = 2,
     Urgently = 3,
     Later = 4

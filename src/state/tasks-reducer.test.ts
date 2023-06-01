@@ -1,12 +1,4 @@
-import {
-    addTaskAC,
-    changeTaskStatusAC,
-    changeTaskTitleAC,
-    removeTaskAC,
-    setTasksAC,
-    tasksReducer,
-    TasksType
-} from "./tasks-reducer";
+import {addTaskAC, changeTaskAC, removeTaskAC, setTasksAC, tasksReducer, TasksType} from "./tasks-reducer";
 import {deleteTodoListAC, setTodoListsAC} from "./todolist-reducer";
 import {TaskType} from "../api/todolists-api";
 import {v1} from "uuid";
@@ -89,7 +81,15 @@ test('task should be added', () => {
 })
 
 test('task status should be changed', () => {
-    const endTasks = tasksReducer(startTasks, changeTaskStatusAC('2', 'todoListsId_1', false))
+    const model = {
+        title: 'CSS',
+        description: '',
+        status: 0,
+        priority: 0,
+        startDate: '',
+        deadline: '',
+    }
+    const endTasks = tasksReducer(startTasks, changeTaskAC('2', 'todoListsId_1', model))
     expect(endTasks).toEqual({
         ['todoListsId_1']: [
             {
@@ -116,7 +116,16 @@ test('task status should be changed', () => {
 })
 
 test('task title should be changed', () => {
-    const endTasks = tasksReducer(startTasks, changeTaskTitleAC('2', 'todoListsId_1', 'new title'))
+    const model = {
+        title: 'new title',
+        description: '',
+        status: 1,
+        priority: 0,
+        startDate: '',
+        deadline: '',
+    }
+
+    const endTasks = tasksReducer(startTasks, changeTaskAC('2', 'todoListsId_1', model))
     expect(endTasks).toEqual({
         ['todoListsId_1']: [
             {

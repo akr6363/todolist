@@ -4,7 +4,7 @@ import {
     changeTodoListTitleAC,
     deleteTodoListAC, deleteTodoListsTC,
     filterType,
-    setTasksFilterAC,
+    setTasksFilterAC, updateTodoListTitleTC,
 } from "../../../state/todolist-reducer";
 import {TasksStatuses, TaskType} from "../../../api/todolists-api";
 import {useAppDispatch, useAppSelector} from "../../../state/hooks";
@@ -42,7 +42,7 @@ export const useTodoList = ( id: string) => {
         dispatch(deleteTodoListsTC(id))
     }
     const changeTodoListTitleHandler = useCallback((newTitle: string) => {
-        dispatch(changeTodoListTitleAC(newTitle, id))
+        dispatch(updateTodoListTitleTC(newTitle, id))
     }, [dispatch, id])
 
 

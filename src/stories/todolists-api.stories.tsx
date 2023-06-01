@@ -30,7 +30,7 @@ export const CreateTodolist = () => {
 
     return <div>
         {JSON.stringify(state)}
-        <input type="text" value={title} onChange={(e)=> setTitle(e.currentTarget.value)}/>
+        <input type="text" value={title} onChange={(e) => setTitle(e.currentTarget.value)}/>
         <button onClick={addTodoList}>add todoList</button>
     </div>
 }
@@ -47,7 +47,9 @@ export const DeleteTodolist = () => {
     return <div>
         {JSON.stringify(state)}
         <input type="text" placeholder={'todoList ID'} value={todoListId}
-        onChange={(e)=> {setTodoListId(e.currentTarget.value)}}/>
+               onChange={(e) => {
+                   setTodoListId(e.currentTarget.value)
+               }}/>
         <button onClick={deleteTodoList}>delete todo</button>
     </div>
 }
@@ -74,7 +76,7 @@ export const GetTasks = () => {
 export const AddTask = () => {
     const [state, setState] = useState<any>(null)
     useEffect(() => {
-        todoListsApi.addTask('95350d0f-1864-4095-95ec-6da3c44ea692','new task')
+        todoListsApi.addTask('95350d0f-1864-4095-95ec-6da3c44ea692', 'new task')
             .then((data) => setState(data.data.item))
     }, [])
 
@@ -97,12 +99,11 @@ export const UpdateTask = () => {
 
     const body = {
         title: 'eeeeeeeeeeeeeee',
-        // description: null,
-        // completed: true,
-        // status: 0,
-        // priority: 1,
-        // startDate:  null,
-        // deadline: null,
+        description: null,
+        status: 0,
+        priority: 1,
+        startDate: null,
+        deadline: null,
     }
     useEffect(() => {
         todoListsApi.updateTask('95350d0f-1864-4095-95ec-6da3c44ea692', '8e94a5a4-d59c-4033-8110-e97c52a06348', body)

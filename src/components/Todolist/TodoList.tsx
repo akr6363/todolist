@@ -12,7 +12,7 @@ import {setTasksAC} from "../../state/tasks-reducer";
 import {useDispatch} from "react-redux";
 
 
-type TodoListPropsType = {
+export type TodoListPropsType = {
     todoList: TodolistBLLType
 }
 

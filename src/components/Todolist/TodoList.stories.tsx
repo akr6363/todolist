@@ -1,8 +1,9 @@
 import TodoList from "./TodoList";
 import {Meta, StoryObj} from "@storybook/react";
 import {ReduxStoreProviderDecorator} from "../../state/reduxStoreProviderDecorator";
-import {TodolistType} from "../../api/todolists-api";
+import {todoListsApi, TodolistType} from "../../api/todolists-api";
 import {TodolistBLLType} from "../../state/todolist-reducer";
+import {useEffect, useLayoutEffect, useState} from "react";
 
 
 
@@ -17,13 +18,30 @@ export default meta;
 
 type Story = StoryObj<typeof TodoList>;
 
+// const TodoListStory = () => {
+//     //const todoList = useSelector<AppRootStateType, TodoLIstType>(state => state.todoLists[0])
+//     let todoList: TodolistBLLType
+//     useEffect(() => {
+//         // const todoList: TodolistBLLType = todoListsApi
+//         todoListsApi.getTodoLists()
+//             .then(data => todoList = {...data[0], filter: 'all'})
+//     }, [])
+//
+//
+//
+//     return <TodoList todoList={todoList}/>
+// }
+
 const TodoListStory = () => {
-    //const todoList = useSelector<AppRootStateType, TodoLIstType>(state => state.todoLists[0])
+    const [todoList, setTodoList] = useState<TodolistBLLType>()
+    useEffect(() => {
+        todoListsApi.getTodoLists()
+            .then(data => setTodoList({...data[0], filter: 'all'}))
+    }, [])
 
-   const todoList: TodolistBLLType = {id: "todolistId2", title: "What to buy", filter: "all", addedDate: '', order: 0}
-
-    return <TodoList todoList={todoList}/>
+    return todoList ? <TodoList todoList={todoList}/> : null
 }
+
 
 export const TodoListStoryExample: Story = {
     render: () => <TodoListStory />

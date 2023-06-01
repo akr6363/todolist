@@ -119,3 +119,12 @@ export const addTodoListsTC = (title: string): AppThunk => (dispatch) => {
             dispatch(addTodoListAC(data.data.item))
         })
 }
+
+export const updateTodoListTitleTC = (title: string, todoListId: string): AppThunk => (dispatch) => {
+    todoListsApi.updateTodoList(title, todoListId)
+        .then(data => {
+            if(data.resultCode === 0) {
+                dispatch(changeTodoListTitleAC(title, todoListId))
+            }
+        })
+}

@@ -1,10 +1,9 @@
 import TodoList from "./TodoList";
 import {Meta, StoryObj} from "@storybook/react";
 import {ReduxStoreProviderDecorator} from "../../state/reduxStoreProviderDecorator";
-import {todoListsApi, TodolistType} from "../../api/todolists-api";
+import {todoListsApi} from "../../api/todolists-api";
 import {TodolistBLLType} from "../../state/todolist-reducer";
-import {useEffect, useLayoutEffect, useState} from "react";
-
+import {useEffect, useState} from "react";
 
 
 const meta: Meta<typeof TodoList> = {

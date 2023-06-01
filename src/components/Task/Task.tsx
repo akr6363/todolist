@@ -1,10 +1,10 @@
 import React, {ChangeEvent, useCallback} from "react";
-import {removeTaskTC, updateTaskTC} from "../state/tasks-reducer";
+import {removeTaskTC, updateTaskTC} from "../../state/tasks-reducer";
 import {Checkbox, IconButton, ListItem, ListItemButton} from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import {EditableSpan} from "./EditableSpan/EditableSpan";
-import {TasksStatuses, TaskType} from "../api/todolists-api";
-import {useAppDispatch} from "../state/hooks";
+import {EditableSpan} from "../EditableSpan/EditableSpan";
+import {TasksStatuses, TaskType} from "../../api/todolists-api";
+import {useAppDispatch} from "../../state/hooks";
 
 
 export type TaskPropsType = {

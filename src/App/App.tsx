@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import './App.css';
-import TodoList from "./components/Todolist/TodoList";
-import {AddItemComponent} from "./components/AddItemComponent";
+import TodoList from "../components/Todolist/TodoList";
+import {AddItemComponent} from "../components/AddItemComponent/AddItemComponent";
 import {
     AppBar,
     Button,
@@ -18,9 +18,9 @@ import {
     Typography
 } from "@mui/material";
 import {Menu} from '@mui/icons-material';
-import {addTodoListAC, addTodoListsTC, fetchTodoListsTC} from "./state/todolist-reducer";
-import {lightTheme} from "./assets/styles/customTheme";
-import {useAppDispatch, useAppSelector} from "./state/hooks";
+import {addTodoListAC, addTodoListsTC, fetchTodoListsTC} from "../state/todolist-reducer";
+import {lightTheme} from "../assets/styles/customTheme";
+import {useAppDispatch, useAppSelector} from "../state/hooks";
 
 
 const App: React.FC = () => {
@@ -83,7 +83,6 @@ const App: React.FC = () => {
                             )
                         })}
                     </Grid>
-
                 </Container>
             </div>
         </ThemeProvider>

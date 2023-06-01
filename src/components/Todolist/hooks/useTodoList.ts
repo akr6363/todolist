@@ -1,11 +1,6 @@
 import {useCallback, useEffect} from "react";
-import {addTaskAC, addTaskTC, fetchTasksTC} from "../../../state/tasks-reducer";
-import {
-    changeTodoListTitleAC,
-    deleteTodoListAC, deleteTodoListsTC,
-    filterType,
-    setTasksFilterAC, updateTodoListTitleTC,
-} from "../../../state/todolist-reducer";
+import {addTaskTC, fetchTasksTC} from "../../../state/tasks-reducer";
+import {deleteTodoListsTC, filterType, setTasksFilterAC, updateTodoListTitleTC,} from "../../../state/todolist-reducer";
 import {TasksStatuses, TaskType} from "../../../api/todolists-api";
 import {useAppDispatch, useAppSelector} from "../../../state/hooks";
 

@@ -1,15 +1,11 @@
-import React, {useEffect, useMemo} from 'react';
-import {} from "../../App";
-import {AddItemComponent} from "../AddItemComponent";
+import React, {useMemo} from 'react';
+import {AddItemComponent} from "../AddItemComponent/AddItemComponent";
 import {EditableSpan} from "../EditableSpan/EditableSpan";
 import {Button, Grid, IconButton, List, Typography} from "@mui/material";
 import ClearIcon from '@mui/icons-material/Clear';
-import {Task} from "../Task";
+import {Task} from "../Task/Task";
 import {useTodoList} from "./hooks/useTodoList";
 import {TodolistBLLType} from "../../state/todolist-reducer";
-import {todoListsApi} from "../../api/todolists-api";
-import {setTasksAC} from "../../state/tasks-reducer";
-import {useDispatch} from "react-redux";
 
 
 export type TodoListPropsType = {

@@ -2,14 +2,14 @@ import type {Meta, StoryObj} from '@storybook/react';
 import React, {ChangeEvent, useCallback} from "react";
 import {Task} from "./Task";
 import {useDispatch, useSelector} from "react-redux";
-import {AppRootStateType} from "../state/store";
-import {changeTaskAC} from "../state/tasks-reducer";
+import {AppRootStateType} from "../../state/store";
+import {changeTaskAC} from "../../state/tasks-reducer";
 import {Checkbox, IconButton, ListItem, ListItemButton} from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import {EditableSpan} from "./EditableSpan/EditableSpan";
+import {EditableSpan} from "../EditableSpan/EditableSpan";
 import {action} from "@storybook/addon-actions";
-import {ReduxStoreProviderDecorator} from "../state/reduxStoreProviderDecorator";
-import {TasksStatuses, TaskType} from "../api/todolists-api";
+import {ReduxStoreProviderDecorator} from "../../state/reduxStoreProviderDecorator";
+import {TasksStatuses, TaskType} from "../../api/todolists-api";
 
 
 const meta: Meta<typeof Task> = {

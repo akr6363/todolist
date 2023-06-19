@@ -35,7 +35,7 @@ const TodoListStory = () => {
     const [todoList, setTodoList] = useState<TodolistBLLType>()
     useEffect(() => {
         todoListsApi.getTodoLists()
-            .then(data => setTodoList({...data[0], filter: 'all'}))
+            .then(data => setTodoList({...data[0], filter: 'all', entityStatus: 'idle'}))
     }, [])
 
     return todoList ? <TodoList todoList={todoList}/> : null

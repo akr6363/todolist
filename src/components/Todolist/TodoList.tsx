@@ -13,7 +13,7 @@ export type TodoListPropsType = {
 }
 
 const TodoList: React.FC<TodoListPropsType> = React.memo(({todoList}) => {
-    const {id, title, filter} = todoList
+    const {id, title, filter, entityStatus} = todoList
 
     const {
         tasks, getTasksForRender,
@@ -49,6 +49,7 @@ const TodoList: React.FC<TodoListPropsType> = React.memo(({todoList}) => {
                               changeTitle={changeTodoListTitleHandler}
                               styles={styles}/>
                 <IconButton onClick={removeTasksListOnClickHandler}
+                            disabled={entityStatus === 'loading'}
                             size={'small'}
                             disableRipple
                             className="delete-todo-button">
@@ -56,7 +57,7 @@ const TodoList: React.FC<TodoListPropsType> = React.memo(({todoList}) => {
                 </IconButton>
             </Typography>
             <Grid container sx={{p: '5px 0'}} justifyContent={"center"}>
-                <AddItemComponent addItem={onAddTaskClickHandler} title={'Add a task'}/>
+                <AddItemComponent addItem={onAddTaskClickHandler} title={'Add a task'} disabled={entityStatus === 'loading'}/>
             </Grid>
             <List>
                 {

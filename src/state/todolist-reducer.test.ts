@@ -1,6 +1,6 @@
 import {v1} from "uuid";
 import {
-    addTodoListAC,
+    addTodoListAC, changeTodoListEntityStatusAC,
     changeTodoListTitleAC, deleteTodoListAC,
     setTasksFilterAC, setTodoListsAC, TodolistBLLType,
     todoListReducer
@@ -15,8 +15,8 @@ beforeEach(() => {
     todoListsId_1 = v1()
     todoListsId_2 = v1()
     startState = [
-        {id: todoListsId_1, title: 'What to learn', filter: 'all', addedDate: '', order: 0},
-        {id: todoListsId_2, title: 'What to buy', filter: 'all', addedDate: '', order: 0},
+        {id: todoListsId_1, title: 'What to learn', filter: 'all', addedDate: '', order: 0, entityStatus: 'idle'},
+        {id: todoListsId_2, title: 'What to buy', filter: 'all', addedDate: '', order: 0, entityStatus: 'idle'},
     ]
 })
 
@@ -40,6 +40,7 @@ test('correct todo list should be added', () => {
         title: 'new todo list',
         filter: 'all',
         addedDate: '',
+        entityStatus: 'idle',
         order: 0
     }
     const endState = todoListReducer(startState, addTodoListAC(newTodoList))
@@ -65,6 +66,15 @@ test('todo lists should be received', () => {
     expect(endState).toEqual([
         {id: '1', title: 'todoListFromServer1', filter: 'all', addedDate: '', order: 0},
         {id: '2', title: 'todoListFromServer2', filter: 'all', addedDate: '', order: 0},
+    ])
+})
+
+test('entity status should be changed', () => {
+
+    const endState = todoListReducer(startState, changeTodoListEntityStatusAC(todoListsId_1, 'loading'))
+    expect(endState).toEqual([
+        {id: todoListsId_1, title: 'What to learn', filter: 'all', addedDate: '', order: 0, entityStatus: 'loading'},
+        {id: todoListsId_2, title: 'What to buy', filter: 'all', addedDate: '', order: 0, entityStatus: 'idle'},
     ])
 })
 

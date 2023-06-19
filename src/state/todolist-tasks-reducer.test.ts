@@ -10,7 +10,8 @@ test('tasks array for added todolist also should be added ', () => {
         title: 'new todo list',
         filter: 'all',
         addedDate: '',
-        order: 0
+        order: 0,
+        entityStatus: 'idle'
     }
 
     const action = addTodoListAC(newTodoList)

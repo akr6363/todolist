@@ -5,9 +5,10 @@ import AddIcon from '@mui/icons-material/Add';
 export type AddItemComponentPropsType = {
     addItem: (title: string) => void
     title: string
+    disabled?: boolean
 }
 export const AddItemComponent: React.FC<AddItemComponentPropsType> =
-    memo( ({addItem, title}) => {
+    memo( ({addItem, title, disabled}) => {
 
         const maxTitleLength = 20
 
@@ -66,6 +67,7 @@ export const AddItemComponent: React.FC<AddItemComponentPropsType> =
                         variant={"text"}
                         size={'small'}
                         startIcon={<AddIcon sx={{mr: '-4px'}}/>}
+                        disabled={disabled}
                     >
                         {title}
                     </Button>

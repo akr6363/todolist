@@ -6,11 +6,13 @@ import {tasksReducer} from "./tasks-reducer";
 import {todoListReducer} from "./todolist-reducer";
 import {v1} from "uuid";
 import thunk from "redux-thunk";
+import {appReducer} from "./app-reducer";
 
 
 const rootReducer = combineReducers({
     tasks: tasksReducer,
-    todolists: todoListReducer
+    todolists: todoListReducer,
+    app: appReducer
 })
 
 const initialGlobalState = {

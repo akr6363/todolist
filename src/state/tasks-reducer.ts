@@ -2,6 +2,7 @@ import {AddTodoListActionType, RemoveTodoListActionType, setTodoListsACActionTyp
 import {TaskType, todoListsApi, updateTaskModelType} from "../api/todolists-api";
 import {AppThunk} from "./store";
 import {setAppErrorAC, setAppStatusAC} from "./app-reducer";
+import {handleServerAppError, handleServerNetworkError} from "../utils/errors-utils";
 
 export const tasksReducer = (state: TasksType = {}, action: TasksReducerActionType) => {
     switch (action.type) {
@@ -74,40 +75,46 @@ export const addTaskTC = (todoListId: string, title: string): AppThunk => (dispa
     dispatch(setAppStatusAC('loading'))
     todoListsApi.addTask(todoListId, title)
         .then(data => {
-            if(data.resultCode === 0) {
+            if (data.resultCode === 0) {
                 dispatch(addTaskAC(data.data.item, todoListId))
                 dispatch(setAppStatusAC('succeeded'))
             } else {
-                dispatch(setAppErrorAC(data.messages[0]))
-                dispatch(setAppStatusAC('failed'))
+                handleServerAppError(data, dispatch)
             }
-
+        })
+        .catch(error => {
+            handleServerNetworkError(error, dispatch)
         })
 }
 export const updateTaskTC = (todoListId: string, taskId: string, modelUpdate: updateTaskModelForTC): AppThunk =>
     (dispatch, getState) => {
-    const task = getState().tasks[todoListId].find(t => t.id === taskId)
-    if (!task) {
-        console.warn(`task didn't found in todolist`)
-        return
-    }
+        const task = getState().tasks[todoListId].find(t => t.id === taskId)
+        if (!task) {
+            console.warn(`task didn't found in todolist`)
+            return
+        }
 
-    const model: updateTaskModelType = {
-        title: task.title,
-        description: task.description,
-        status: task.status,
-        priority: task.priority,
-        startDate: task.startDate,
-        deadline: task.deadline,
-        ...modelUpdate
+        const model: updateTaskModelType = {
+            title: task.title,
+            description: task.description,
+            status: task.status,
+            priority: task.priority,
+            startDate: task.startDate,
+            deadline: task.deadline,
+            ...modelUpdate
+        }
+        todoListsApi.updateTask(todoListId, taskId, model)
+            .then(data => {
+                if (data.resultCode === 0) {
+                    dispatch(changeTaskAC(taskId, todoListId, model))
+                } else {
+                    handleServerAppError(data, dispatch)
+                }
+            })
+            .catch(error => {
+                handleServerNetworkError(error, dispatch)
+            })
     }
-    todoListsApi.updateTask(todoListId, taskId, model)
-        .then(data => {
-            if (data.resultCode === 0) {
-                dispatch(changeTaskAC(taskId, todoListId, model))
-            }
-        })
-}
 
 //types
 type updateTaskModelForTC = {

@@ -67,7 +67,7 @@ export type TodolistType = {
     order: number
     title: string
 }
-type ResponseType<R = {}> = {
+export type ResponseType<R = {}> = {
     data: R
     fieldsErrors: string[]
     messages: string[]

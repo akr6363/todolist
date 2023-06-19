@@ -1,5 +1,6 @@
 import {todoListsApi, TodolistType} from "../api/todolists-api";
 import {AppThunk} from "./store";
+import {setStatusAC, statusType} from "./app-reducer";
 
 export const todoListReducer = (state: TodolistBLLType[] = [], action: TodoListActionsType): TodolistBLLType[] => {
     switch (action.type) {
@@ -14,7 +15,7 @@ export const todoListReducer = (state: TodolistBLLType[] = [], action: TodoListA
                 .filter((tl) => tl.id !== action.todoListsId)
 
         case 'ADD-TODOLIST':
-            return [{...action.todoList, filter: 'all'}, ...state]
+            return [{...action.todoList, filter: 'all', entityStatus: 'idle'}, ...state]
 
         case 'CHANGE-TODOLIST-TITLE':
             return state
@@ -22,7 +23,7 @@ export const todoListReducer = (state: TodolistBLLType[] = [], action: TodoListA
                     ? {...tl, title: action.newTitle}
                     : tl)
         case 'SET-TODOLISTS':
-            return action.todoLists.map(tl => ({...tl, filter: 'all'}))
+            return action.todoLists.map(tl => ({...tl, filter: 'all', entityStatus: 'idle'}))
 
         default:
             return state
@@ -43,9 +44,11 @@ export const changeTodoListTitleAC = (newTitle: string, todoListsId: string) =>
 
 //thunks
 export const fetchTodoListsTC = (): AppThunk => (dispatch) => {
+    dispatch(setStatusAC('loading'))
     todoListsApi.getTodoLists()
         .then(data => {
             dispatch(setTodoListsAC(data))
+            dispatch(setStatusAC('succeeded'))
         })
 }
 export const deleteTodoListsTC = (todoListId: string): AppThunk => (dispatch) => {
@@ -57,9 +60,11 @@ export const deleteTodoListsTC = (todoListId: string): AppThunk => (dispatch) =>
         })
 }
 export const addTodoListsTC = (title: string): AppThunk => (dispatch) => {
+    dispatch(setStatusAC('loading'))
     todoListsApi.addTodoList(title)
         .then(data => {
             dispatch(addTodoListAC(data.data.item))
+            dispatch(setStatusAC('succeeded'))
         })
 }
 export const updateTodoListTitleTC = (title: string, todoListId: string): AppThunk => (dispatch) => {
@@ -87,4 +92,5 @@ export type filterType = 'all' | 'active' | 'completed'
 
 export type TodolistBLLType = TodolistType & {
     filter: filterType
+    entityStatus: statusType
 }

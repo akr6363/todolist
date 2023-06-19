@@ -29,10 +29,12 @@ export const AddItemComponent: React.FC<AddItemComponentPropsType> =
         }
 
         const onAddTaskClickHandler = () => {
-            if (!error) {
-                addItem(inputValue.trim())
-            }
+            // if (!error) {
+            //     addItem(inputValue.trim())
+            // }
+            addItem(inputValue.trim())
             setInputValue('')
+            setError(null)
             setEditMode(false)
         }
 
@@ -45,11 +47,12 @@ export const AddItemComponent: React.FC<AddItemComponentPropsType> =
 
 
         const onBlurHandler = () => {
-            if (!!error || !inputValue.length) {
-                setEditMode(false)
-            } else {
-                onAddTaskClickHandler()
-            }
+            // if (!!error || !inputValue.length) {
+            //     setEditMode(false)
+            // } else {
+            //     onAddTaskClickHandler()
+            // }
+            onAddTaskClickHandler()
         }
 
         return (
@@ -75,12 +78,12 @@ export const AddItemComponent: React.FC<AddItemComponentPropsType> =
                         }}
                         className={'add-item-input'}
                         autoFocus
-                        onBlur={onBlurHandler}
+                        // onBlur={onBlurHandler}
                         placeholder={'Enter task title, please'}
                         value={inputValue}
                         onChange={onChangeInputValueHandler}
                         onKeyUp={onKeyUpAddTaskHandler}
-                        error={!!error}
+                         error={!!error}
                         size={'small'}
                         helperText={error}
                         InputProps={{
@@ -88,7 +91,8 @@ export const AddItemComponent: React.FC<AddItemComponentPropsType> =
                                 <IconButton
                                     disableRipple
                                     className={'delete-todo-button'}
-                                    disabled={!!error || !inputValue.length} onClick={onAddTaskClickHandler}>
+                                    // disabled={!!error || !inputValue.length}
+                                    onClick={onAddTaskClickHandler}>
                                     <AddIcon/>
                                 </IconButton>
                             ),

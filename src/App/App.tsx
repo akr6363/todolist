@@ -11,7 +11,7 @@ import {
     FormControlLabel,
     FormGroup,
     Grid,
-    IconButton,
+    IconButton, LinearProgress,
     Paper,
     ThemeProvider,
     Toolbar,
@@ -21,20 +21,21 @@ import {Menu} from '@mui/icons-material';
 import {addTodoListAC, addTodoListsTC, fetchTodoListsTC} from "../state/todolist-reducer";
 import {lightTheme} from "../assets/styles/customTheme";
 import {useAppDispatch, useAppSelector} from "../state/hooks";
+import CustomizedSnackbars from "../components/ErrorSnackBar/ErrorSnackBar";
 
 
 const App: React.FC = () => {
 
     const dispatch = useAppDispatch()
     const todoLists = useAppSelector(state => state.todoLists)
-
+    const status = useAppSelector(state => state.app.status)
     const [isDarkMode, setDarkMode] = useState<boolean>(false)
 
     const addTodoList = useCallback((title: string) => {
         dispatch(addTodoListsTC(title))
     }, [dispatch])
 
-    useEffect(()=> {
+    useEffect(() => {
         dispatch(fetchTodoListsTC())
     }, [])
 
@@ -42,6 +43,7 @@ const App: React.FC = () => {
         <ThemeProvider theme={lightTheme}>
             <CssBaseline/>
             <div className="App">
+                <CustomizedSnackbars/>
                 <AppBar position="static">
                     <Toolbar>
                         <IconButton
@@ -65,6 +67,7 @@ const App: React.FC = () => {
                         </FormGroup>
                         <Button color="inherit">Login</Button>
                     </Toolbar>
+                    {status === 'loading' && <LinearProgress color="secondary"/>}
                 </AppBar>
                 <Container fixed>
                     <Grid container sx={{p: '15px 0'}} justifyContent={"center"}>

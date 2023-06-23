@@ -8,6 +8,7 @@ type EditableSpanPropsType = {
     isDone?: TasksStatuses
     changeTitle: (newTitle: string) => void
     styles?: React.CSSProperties
+    disabled?: boolean
 }
 
 
@@ -16,7 +17,8 @@ export const EditableSpan: React.FC<EditableSpanPropsType> = React.memo((
         title,
         isDone,
         changeTitle,
-        styles
+        styles,
+        disabled
     }) => {
 
     const {
@@ -27,7 +29,7 @@ export const EditableSpan: React.FC<EditableSpanPropsType> = React.memo((
         changeValueHandler,
         onKeyUpEditTitleTasksHandler,
         onFocusHandler
-    } = useEditableSpan(title, changeTitle)
+    } = useEditableSpan(title, changeTitle, disabled)
 
     return (
         isEdit
@@ -48,9 +50,11 @@ export const EditableSpan: React.FC<EditableSpanPropsType> = React.memo((
                          type="text"
                          autoFocus
                          onFocus={onFocusHandler}
-                         onChange={changeValueHandler}/>
+                         onChange={changeValueHandler}
+            />
             : <span onDoubleClick={setEditMode}
-                    className={isDone === TasksStatuses.Completed ? 'is-done' : 'task-title'}>
+                    className={isDone === TasksStatuses.Completed ? 'is-done' : 'task-title'}
+            >
                     {title}
             </span>
     )

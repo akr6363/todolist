@@ -1,11 +1,15 @@
 import React, {ChangeEvent, FocusEvent, useState} from "react";
 
-export const useEditableSpan = (title: string, onEditedTitleTask:(newTitle: string) => void ) => {
+export const useEditableSpan =
+    (title: string, onEditedTitleTask:(newTitle: string) => void, disabled?: boolean ) => {
 
     const [isEdit, setIsEdit] = useState<boolean>(false)
     const [inputValue, setInputValue] = useState<string>('')
 
     const setEditMode = () => {
+        if (disabled) {
+            return
+        }
         setIsEdit(true)
         setInputValue(title)
     }

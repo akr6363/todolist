@@ -1,24 +1,17 @@
-import {TaskType, todoListsApi, TodolistType} from "../api/todolists-api";
-import {AppThunk} from "./store";
-import {setTasksAC} from "./tasks-reducer";
-
 export type statusType = 'idle' | 'loading' | 'succeeded' | 'failed'
 
-export type initialAppStateType = {
-    error: null | string
-    status: statusType
-}
-
 const initialState = {
-    error: null,
+    error: null as null | string,
     status: 'idle' as statusType
 }
 
+export type initialAppStateType = typeof initialState
+
 export const appReducer = (state: initialAppStateType = initialState, action: AppStateActionsType): initialAppStateType => {
     switch (action.type) {
-        case 'SET-STATUS':
+        case 'APP/SET-STATUS':
             return {...state, status: action.status}
-        case 'SET-ERROR':
+        case 'APP/SET-ERROR':
             return {...state, error: action.error}
         default:
             return state
@@ -26,15 +19,11 @@ export const appReducer = (state: initialAppStateType = initialState, action: Ap
 }
 
 //actions
-
-
- export const setAppErrorAC = (error: string | null) =>
-     ({type: 'SET-ERROR', error} as const)
+export const setAppErrorAC = (error: string | null) =>
+    ({type: 'APP/SET-ERROR', error} as const)
 
 export const setAppStatusAC = (status: statusType) =>
-    ({type: 'SET-STATUS', status} as const)
-
+    ({type: 'APP/SET-STATUS', status} as const)
 
 //types
-
 export type AppStateActionsType = ReturnType<typeof setAppErrorAC> | ReturnType<typeof setAppStatusAC>

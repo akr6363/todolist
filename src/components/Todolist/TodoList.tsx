@@ -25,10 +25,10 @@ const TodoList: React.FC<TodoListPropsType> = React.memo(({todoList}) => {
 
     const todoListItems: Array<JSX.Element> =
         getTasksForRender(tasks, filter).map((task) => {
-        return (
-            <Task task={task} todolistID={id} key={task.id}/>
-        )
-    })
+            return (
+                <Task task={task} todolistID={id} key={task.id}/>
+            )
+        })
 
     const styles = useMemo(() => {
         return {
@@ -47,7 +47,8 @@ const TodoList: React.FC<TodoListPropsType> = React.memo(({todoList}) => {
                         sx={{display: 'flex', justifyContent: 'space-between'}}>
                 <EditableSpan title={title}
                               changeTitle={changeTodoListTitleHandler}
-                              styles={styles}/>
+                              styles={styles}
+                              disabled={entityStatus === 'loading'}/>
                 <IconButton onClick={removeTasksListOnClickHandler}
                             disabled={entityStatus === 'loading'}
                             size={'small'}
@@ -57,7 +58,8 @@ const TodoList: React.FC<TodoListPropsType> = React.memo(({todoList}) => {
                 </IconButton>
             </Typography>
             <Grid container sx={{p: '5px 0'}} justifyContent={"center"}>
-                <AddItemComponent addItem={onAddTaskClickHandler} title={'Add a task'} disabled={entityStatus === 'loading'}/>
+                <AddItemComponent addItem={onAddTaskClickHandler} title={'Add a task'}
+                                  disabled={entityStatus === 'loading'}/>
             </Grid>
             <List>
                 {

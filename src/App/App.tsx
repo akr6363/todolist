@@ -2,26 +2,28 @@ import React, {useCallback, useEffect, useState} from 'react';
 import './App.css';
 import TodoList from "../components/Todolist/TodoList";
 import {AddItemComponent} from "../components/AddItemComponent/AddItemComponent";
-import {
-    AppBar,
-    Button,
-    Checkbox,
-    Container,
-    CssBaseline,
-    FormControlLabel,
-    FormGroup,
-    Grid,
-    IconButton, LinearProgress,
-    Paper,
-    ThemeProvider,
-    Toolbar,
-    Typography
-} from "@mui/material";
+
+import Button from "@mui/material/Button";
+import AppBar from "@mui/material/AppBar";
+import Checkbox from "@mui/material/Checkbox";
+import Container from "@mui/material/Container";
+import CssBaseline from "@mui/material/CssBaseline";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Grid from "@mui/material/Grid";
+import IconButton from "@mui/material/IconButton";
+import LinearProgress from "@mui/material/LinearProgress";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import FormGroup from "@mui/material/FormGroup";
+import Paper from "@mui/material/Paper";
+import {ThemeProvider} from "@mui/material";
+
 import {Menu} from '@mui/icons-material';
 import {addTodoListAC, addTodoListsTC, fetchTodoListsTC} from "../state/todolist-reducer";
 import {lightTheme} from "../assets/styles/customTheme";
 import {useAppDispatch, useAppSelector} from "../state/hooks";
-import CustomizedSnackbars from "../components/ErrorSnackBar/ErrorSnackBar";
+import {ErrorSnackBar} from "../components/ErrorSnackBar/ErrorSnackBar";
+
 
 
 const App: React.FC = () => {
@@ -43,7 +45,7 @@ const App: React.FC = () => {
         <ThemeProvider theme={lightTheme}>
             <CssBaseline/>
             <div className="App">
-                <CustomizedSnackbars/>
+                <ErrorSnackBar/>
                 <AppBar position="static">
                     <Toolbar>
                         <IconButton

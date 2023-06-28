@@ -10,9 +10,9 @@ export const useTodoList = ( id: string) => {
     const dispatch = useAppDispatch()
     const tasks = useAppSelector(state => state.tasks[id])
 
-    useEffect(()=> {
-        dispatch(fetchTasksTC(id))
-    }, [])
+    // useEffect(()=> {
+    //     dispatch(fetchTasksTC(id))
+    // }, [])
 
 
     const getTasksForRender = (tasksList: Array<TaskType>, filterValue: filterType) => {

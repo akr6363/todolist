@@ -5,6 +5,7 @@ import {AppThunk} from "./store";
 import {handleServerAppError, handleServerNetworkError} from "../utils/errors-utils";
 import {removeTaskAC, setTasksAC} from "./tasks-reducer";
 import {number} from "prop-types";
+import {clearTodoDataAC, clearTodoDataActionType} from "./todolist-reducer";
 
 const initialState = {
     isLoggedIn: false
@@ -48,6 +49,7 @@ export const logoutTC = (): AppThunk => (dispatch: Dispatch<ActionsType>) => {
             if (data.resultCode === ResultCode.SUCCESS) {
                 dispatch(setIsLoggedInAC(false))
                 dispatch(setAppStatusAC('succeeded'))
+                dispatch(clearTodoDataAC())
             } else {
                 handleServerAppError(data, dispatch)
             }
@@ -78,4 +80,4 @@ export const initializeAppTC = (): AppThunk => (dispatch: Dispatch<AppStateActio
 
 export type setIsLoggedInActionType = ReturnType<typeof setIsLoggedInAC>
 // types
-type ActionsType = setIsLoggedInActionType | AppStateActionsType
+type ActionsType = setIsLoggedInActionType | AppStateActionsType | clearTodoDataActionType

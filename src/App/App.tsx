@@ -78,8 +78,12 @@ const App: React.FC = () => {
                                 />
                             </FormGroup>
                             {isLoggedIn && <Button color="inherit" onClick={logoutHandler}>Log out</Button>}
+                            {status === 'loading' &&
+                                <LinearProgress
+                                    color="secondary" sx={{position: 'absolute', left: 0, bottom: 0, width: '100%'}}
+                                />}
                         </Toolbar>
-                        {status === 'loading' && <LinearProgress color="secondary"/>}
+
                     </AppBar>
                     <Container fixed>
                         <Routes>

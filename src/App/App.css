@@ -1,61 +1,11 @@
-
-/*.App {*/
-/*  padding: 30px;*/
-/*  display: flex;*/
-/*}*/
-
-/*.App > div {*/
-/*  margin-right: 50px;*/
-/*}*/
-
-
-/*.todolist {*/
-/*  border-radius: 5px;*/
-/*  padding: 20px;*/
-/*  !*background-color: aquamarine;*!*/
-/*}*/
-
-/*.todolist-empty {*/
-/*  width: 250px;*/
-/*  border-radius: 5px;*/
-/*  padding: 20px;*/
-/*  background-color: antiquewhite;*/
-/*}*/
-
-/*.error {*/
-/*  color: red*/
-/*}*/
-
-/*.error-input {*/
-/*  border: 1px solid red;*/
-/*}*/
-
-/*.input {*/
-/*  outline: none;*/
-/*}*/
-
-/*.input:focus {*/
-/*  outline: none;*/
-/*}*/
-
-/*.active-filter {*/
-/*  background-color: gold;*/
-/*}*/
-
 .is-done {
   text-decoration: line-through;
 }
-
-/*.task-title {*/
-/*  width: 100%;*/
-/*}*/
 
 .btn-container {
   display: flex;
   justify-content: space-between;
 }
-
-
 
 .delete-todo-button:hover {
   color: #ffbd1d;

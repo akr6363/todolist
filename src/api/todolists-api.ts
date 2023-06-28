@@ -1,4 +1,5 @@
-import axios from "axios";
+import axios, {AxiosResponse} from "axios";
+import {number} from "prop-types";
 
 const instance = axios.create({
     baseURL: 'https://social-network.samuraijs.com/api/1.1/',
@@ -7,6 +8,37 @@ const instance = axios.create({
     //     'api-key': '18f6704c-b342-412b-afac-2949b9a3d1f5'
     // }
 })
+
+export type loginRequestType = {
+    email: string,
+    password: string,
+    rememberMe: boolean,
+    captcha?: string
+}
+
+export const authApi = {
+    login(data: loginRequestType) {
+        return instance
+            .post <ResponseType<{ userId?: number }>>('/auth/login', data)
+            .then((response) => {
+                return response.data
+            })
+    },
+    logout() {
+        return instance
+            .delete <ResponseType>('/auth/login')
+            .then((response) => {
+                return response.data
+            })
+    },
+    me() {
+        return instance
+            .get<ResponseType<{  id: number, email: string, login: string }>>('/auth/me')
+            .then((response) => {
+                return response.data
+            })
+    }
+}
 
 export const todoListsApi = {
     getTodoLists() {
@@ -81,12 +113,14 @@ export type updateTaskModelType = {
     startDate: string | null
     deadline: string | null
 }
+
 export enum TasksStatuses {
     New = 0,
     InProgress = 1,
     Completed = 2,
     Draft = 3
 }
+
 export enum TasksPriorities {
     Low = 0,
     Middle = 1,
@@ -94,11 +128,13 @@ export enum TasksPriorities {
     Urgently = 3,
     Later = 4
 }
-export enum ResultCode  {
+
+export enum ResultCode {
     SUCCESS = 0,
     ERROR = 1,
     ERROR_CAPTCHA = 10,
 }
+
 export type TaskType = {
     addedDate: string
     deadline: null | string

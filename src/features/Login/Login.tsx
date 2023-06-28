@@ -9,9 +9,15 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import {useFormik} from "formik";
 import styled from "@emotion/styled";
+import {useAppDispatch, useAppSelector} from "../../state/hooks";
+import {loginTC} from "../../state/auth-reducer";
+import {Navigate} from "react-router-dom";
 
 
 export const Login = () => {
+
+    const dispatch = useAppDispatch()
+    const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
 
     type FormikErrorType = {
         email?: string
@@ -36,7 +42,7 @@ export const Login = () => {
 
             if (!values.password) {
                 errors.password = 'Password is required';
-            } else if (values.password.trim().length < 6) {
+            } else if (values.password.trim().length < 3) {
                 errors.password = 'the password cannot be shorter than 6 characters';
             }
 
@@ -44,9 +50,13 @@ export const Login = () => {
         },
         onSubmit: values => {
             formik.resetForm()
-            alert(JSON.stringify(values));
+            dispatch(loginTC(values))
         },
     })
+
+    if (isLoggedIn) {
+        return <Navigate to={'/'}/>
+    }
 
     return <Grid container justifyContent={'center'}>
         <Grid item justifyContent={'center'}>

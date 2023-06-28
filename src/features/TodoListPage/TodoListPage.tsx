@@ -1,12 +1,12 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import TodoList from "../../components/Todolist/TodoList";
 import {useAppDispatch, useAppSelector} from "../../state/hooks";
 import {AddItemComponent} from "../../components/AddItemComponent/AddItemComponent";
-import {Route, Routes} from "react-router-dom";
+import {Navigate, Route, Routes} from "react-router-dom";
 import {Login} from "../Login/Login";
-import {addTodoListsTC} from "../../state/todolist-reducer";
+import {addTodoListsTC, fetchTodoListsTC} from "../../state/todolist-reducer";
 
 
 const TodoListPage: React.FC<{}> = ({}) => {
@@ -14,9 +14,22 @@ const TodoListPage: React.FC<{}> = ({}) => {
     const dispatch = useAppDispatch()
     const todoLists = useAppSelector(state => state.todoLists)
 
+
     const addTodoList = useCallback((title: string) => {
         dispatch(addTodoListsTC(title))
     }, [dispatch])
+
+    const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
+
+    useEffect(() => {
+        if (!isLoggedIn) return
+        dispatch(fetchTodoListsTC())
+    }, [])
+
+
+    if (!isLoggedIn) {
+        return <Navigate to={'/login'}/>
+    }
 
     return (
         <>

@@ -4,7 +4,6 @@ import {setAppStatusAC, statusType} from "./app-reducer";
 import {handleServerAppError, handleServerNetworkError} from "../utils/errors-utils";
 import {addTaskAC, fetchTasksTC} from "./tasks-reducer";
 import {Simulate} from "react-dom/test-utils";
-import error = Simulate.error;
 
 export const todoListReducer = (state: TodolistBLLType[] = [], action: TodoListActionsType): TodolistBLLType[] => {
     switch (action.type) {

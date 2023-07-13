@@ -16,13 +16,14 @@ import CircularProgress from "@mui/material/CircularProgress";
 import {ThemeProvider} from "@mui/material";
 
 import {Menu} from '@mui/icons-material';
-import {lightTheme} from "../assets/styles/customTheme";
+import {darkTheme, lightTheme} from "../assets/styles/customTheme";
 import {useAppDispatch, useAppSelector} from "../state/hooks";
 import {ErrorSnackBar} from "../components/ErrorSnackBar/ErrorSnackBar";
 import TodoListPage from "../features/TodoListPage/TodoListPage";
 import {Login} from "../features/Login/Login";
 import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
 import {initializeAppTC, logoutTC} from "../state/auth-reducer";
+import {MaterialUISwitch} from "../components/ThemeSwitch/ThemeSwitch";
 
 
 const App: React.FC = () => {
@@ -44,7 +45,7 @@ const App: React.FC = () => {
     if (!isInitialized) {
         return <div
             style={{position: 'fixed', top: '30%', textAlign: 'center', width: '100%'}}>
-            <ThemeProvider theme={lightTheme}>
+            <ThemeProvider theme={isDarkMode ? lightTheme : darkTheme}>
                 <CircularProgress color={'secondary'}/>
             </ThemeProvider>
         </div>
@@ -52,7 +53,7 @@ const App: React.FC = () => {
 
     return (
         <BrowserRouter>
-            <ThemeProvider theme={lightTheme}>
+            <ThemeProvider theme={isDarkMode ?  darkTheme : lightTheme}>
                 <CssBaseline/>
                 <div className="App">
                     <ErrorSnackBar/>
@@ -70,13 +71,14 @@ const App: React.FC = () => {
                             <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
                                 TodoLists
                             </Typography>
-                            <FormGroup>
-                                <FormControlLabel
-                                    control={<Checkbox
-                                        onChange={(e) => setDarkMode(e.currentTarget.checked)}/>}
-                                    label={isDarkMode ? "Light mode" : "Dark mode"}
-                                />
-                            </FormGroup>
+                            {/*<FormGroup>*/}
+                            {/*    <FormControlLabel*/}
+                            {/*        control={<Checkbox*/}
+                            {/*            onChange={(e) => setDarkMode(e.currentTarget.checked)}/>}*/}
+                            {/*        label={isDarkMode ? "Light mode" : "Dark mode"}*/}
+                            {/*    />*/}
+                            {/*</FormGroup>*/}
+                            <MaterialUISwitch onChange={(e) => setDarkMode(e.currentTarget.checked)}/>
                             {isLoggedIn && <Button color="inherit" onClick={logoutHandler}>Log out</Button>}
                             {status === 'loading' &&
                                 <LinearProgress

@@ -24,6 +24,7 @@ import {Login} from "../features/Login/Login";
 import {BrowserRouter, HashRouter, Navigate, Route, Routes} from "react-router-dom";
 import {initializeAppTC, logoutTC} from "../state/auth-reducer";
 import {MaterialUISwitch} from "../components/ThemeSwitch/ThemeSwitch";
+import {NotFound404} from "../components/404/404";
 
 
 const App: React.FC = () => {
@@ -91,7 +92,7 @@ const App: React.FC = () => {
                         <Routes>
                             <Route path={'/'} element={<TodoListPage/>}/>
                             <Route path={'/login'} element={<Login/>}/>
-                            <Route path={'/404'} element={<h1 style={{textAlign: 'center'}}>404: PAGE NOT FOUND</h1>}/>
+                            <Route path={'/404'} element={<NotFound404/>}/>
                             <Route path={'*'} element={<Navigate to={'/404'}/>}/>
                         </Routes>
                     </Container>

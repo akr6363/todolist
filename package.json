@@ -2,6 +2,7 @@
   "name": "1-lesson",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://akr6363.github.io/todolist",
   "dependencies": {
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
@@ -21,6 +22,7 @@
     "@types/uuid": "^9.0.1",
     "axios": "0.26.0",
     "formik": "^2.4.2",
+    "gh-pages": "^5.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-redux": "^8.0.5",
@@ -41,7 +43,9 @@
     "storybook": "storybook dev -p 9009",
     "build-storybook": "storybook build",
     "jest:integration": "jest -c integration/jest.config.js",
-    "test:integration": "start-server-and-test storybook http-get://localhost:9009 jest:integration"
+    "test:integration": "start-server-and-test storybook http-get://localhost:9009 jest:integration",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [

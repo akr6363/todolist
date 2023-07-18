@@ -21,7 +21,7 @@ import {useAppDispatch, useAppSelector} from "../state/hooks";
 import {ErrorSnackBar} from "../components/ErrorSnackBar/ErrorSnackBar";
 import TodoListPage from "../features/TodoListPage/TodoListPage";
 import {Login} from "../features/Login/Login";
-import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
+import {BrowserRouter, HashRouter, Navigate, Route, Routes} from "react-router-dom";
 import {initializeAppTC, logoutTC} from "../state/auth-reducer";
 import {MaterialUISwitch} from "../components/ThemeSwitch/ThemeSwitch";
 
@@ -52,7 +52,7 @@ const App: React.FC = () => {
     }
 
     return (
-        <BrowserRouter>
+        <HashRouter>
             <ThemeProvider theme={isDarkMode ?  darkTheme : lightTheme}>
                 <CssBaseline/>
                 <div className="App">
@@ -97,7 +97,7 @@ const App: React.FC = () => {
                     </Container>
                 </div>
             </ThemeProvider>
-        </BrowserRouter>
+        </HashRouter>
     );
 }
 
